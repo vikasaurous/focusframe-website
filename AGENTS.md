@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Store/GitHub/site URLs live only in `src/config/site.ts`; empty store URLs mean "not published" — never invent them.
+- Landing sections live in `src/components/ff/*`; pixel art is code-rendered SVG via `Sprite` with `--px-*` palette tokens so it stays theme-driven.

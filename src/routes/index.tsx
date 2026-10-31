@@ -1,24 +1,51 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Hero, Nav, Preview, Statement } from "@/components/ff/top";
+import { LayoutSection, Modules } from "@/components/ff/modules";
+import { CommandSection } from "@/components/ff/command";
+import { Personalize, PixelWorld, YearDots } from "@/components/ff/world";
+import { Browsers, Faq, FinalCta, Footer, HowItWorks, Privacy } from "@/components/ff/bottom";
+import { PRODUCT } from "@/config/site";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "FocusFrame — Make Every New Tab Count";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: PRODUCT.description },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: PRODUCT.description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: PRODUCT.description },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground">Skip to content</a>
+      <Nav />
+      <main id="main">
+        <Hero />
+        <Preview />
+        <Statement />
+        <Modules />
+        <LayoutSection />
+        <CommandSection />
+        <PixelWorld />
+        <YearDots />
+        <Personalize />
+        <Privacy />
+        <HowItWorks />
+        <Browsers />
+        <Faq />
+        <FinalCta />
+      </main>
+      <Footer />
+    </>
   );
 }
