@@ -88,9 +88,9 @@ function QuoteDemo() {
   const [pinned, setPinned] = useState(false);
   return (
     <figure>
-      <blockquote key={i} className="anim-rise font-serif text-2xl leading-snug text-foreground">“{QUOTES[i][0]}”</blockquote>
+      <blockquote key={i} className="anim-rise font-serif text-2xl leading-snug text-foreground">“{QUOTES[i]?.[0]}”</blockquote>
       <figcaption className="mt-3 flex items-center justify-between font-mono text-xs text-subtle">
-        — {QUOTES[i][1]}
+        — {QUOTES[i]?.[1]}
         <span className="flex gap-1">
           <button onClick={() => { setI((i + 1) % QUOTES.length); setPinned(false); }} aria-label="Shuffle quote" className="grid size-9 place-items-center rounded border border-border hover:text-foreground"><Shuffle className="size-3.5" /></button>
           <button onClick={() => setPinned(!pinned)} aria-pressed={pinned} aria-label="Pin quote" className={`grid size-9 place-items-center rounded border ${pinned ? "border-primary text-primary" : "border-border hover:text-foreground"}`}><Pin className="size-3.5" /></button>
