@@ -66,11 +66,11 @@ function HabitsDemo() {
         <div key={h} className="grid grid-cols-[5rem_repeat(7,1fr)_2.5rem] items-center gap-1">
           <span className="truncate text-sm text-foreground">{h}</span>
           {DAYS.map((d, di) => (
-            <button key={di} aria-label={`${h} on day ${di + 1}`} aria-pressed={grid[hi][di]}
+            <button key={di} aria-label={`${h} on day ${di + 1}`} aria-pressed={grid[hi]?.[di]}
               onClick={() => setGrid(grid.map((r, i) => (i === hi ? r.map((c, j) => (j === di ? !c : c)) : r)))}
-              className={`aspect-square rounded-sm border ${grid[hi][di] ? "border-primary bg-primary" : "border-border bg-background hover:border-subtle"}`} />
+              className={`aspect-square rounded-sm border ${grid[hi]?.[di] ? "border-primary bg-primary" : "border-border bg-background hover:border-subtle"}`} />
           ))}
-          <span className="text-right font-mono text-xs text-primary">{streak(grid[hi])}</span>
+          <span className="text-right font-mono text-xs text-primary">{streak(grid[hi] ?? [])}</span>
         </div>
       ))}
     </div>

@@ -47,7 +47,7 @@ function CommandDemo() {
     if (suggesting && matches.length) {
       if (e.key === "ArrowDown") { e.preventDefault(); setActive((active + 1) % matches.length); return; }
       if (e.key === "ArrowUp") { e.preventDefault(); setActive((active - 1 + matches.length) % matches.length); return; }
-      if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); choose(matches[active]); return; }
+      if (e.key === "Enter" || e.key === "Tab") { e.preventDefault(); { const m = matches[active]; if (m) choose(m); } return; }
     }
     if (e.key === "Backspace" && !value && dest) { setDest(null); return; }
     if (e.key === "Escape") { setValue(""); setDest(null); setHandoff(null); return; }
@@ -101,7 +101,7 @@ function CommandDemo() {
             <div className="flex min-h-64 flex-col justify-center gap-3 p-6">
               <p className="font-mono text-xs text-subtle">Try one:</p>
               {[["/wiki", "cats"], ["/r", "python"], ["/gh", "react"]].map(([a, q]) => (
-                <button key={a} onClick={() => tryCmd(a, q)} className="flex w-fit items-center gap-3 rounded border border-border px-3 py-2 font-mono text-sm text-foreground hover:border-primary">
+                <button key={a} onClick={() => tryCmd(a!, q!)} className="flex w-fit items-center gap-3 rounded border border-border px-3 py-2 font-mono text-sm text-foreground hover:border-primary">
                   <span className="text-primary">{a}</span>{q}<CornerDownLeft className="size-3 text-subtle" />
                 </button>
               ))}
