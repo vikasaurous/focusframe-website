@@ -29,7 +29,7 @@ export function PixelWorld() {
               </div>
             </Control>
             <Control label="Companion">
-              <div className="grid grid-cols-3 gap-2">{PETS.map((p) => <Toggle key={p} on={pet === p} onClick={() => setPet(p)}>{p === "dinosaur" ? "Dino" : p[0].toUpperCase() + p.slice(1)}</Toggle>)}</div>
+              <div className="grid grid-cols-3 gap-2">{PETS.map((p) => <Toggle key={p} on={pet === p} onClick={() => setPet(p)}>{p === "dinosaur" ? "Dino" : p.charAt(0).toUpperCase() + p.slice(1)}</Toggle>)}</div>
             </Control>
             <Control label="Animations">
               <div className="grid grid-cols-2 gap-2">
@@ -163,7 +163,7 @@ export function Personalize() {
             </div>
             <div>
               <p className="eyebrow mb-3">Companion</p>
-              <div className="grid grid-cols-3 gap-2">{PETS.map((p) => <Toggle key={p} on={pet === p} onClick={() => setPet(p)}>{p === "dinosaur" ? "Dino" : p[0].toUpperCase() + p.slice(1)}</Toggle>)}</div>
+              <div className="grid grid-cols-3 gap-2">{PETS.map((p) => <Toggle key={p} on={pet === p} onClick={() => setPet(p)}>{p === "dinosaur" ? "Dino" : p.charAt(0).toUpperCase() + p.slice(1)}</Toggle>)}</div>
             </div>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-6 font-mono text-[11px] text-muted-foreground">
               {opts.map((o) => <li key={o} className="before:mr-1.5 before:text-live before:content-['▪']">{o}</li>)}
