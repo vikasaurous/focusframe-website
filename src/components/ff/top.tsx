@@ -8,7 +8,7 @@ import { PixelScene } from "./pixel";
 export function Nav() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur" data-oneko-zone="avoid">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8" aria-label="Main">
         <a href="#top" className="flex items-center gap-2.5 font-mono text-sm font-semibold tracking-tight text-foreground">
           <BrandMark /> FocusFrame
