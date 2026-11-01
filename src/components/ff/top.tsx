@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Github, Menu, X } from "lucide-react";
 import { GITHUB_URL, NAV_LINKS } from "@/config/site";
 import { BrandMark, FirefoxButton, Reveal, SectionHead, WindowFrame } from "./shared";
-import { CommandBarMock, DashboardMock, ProductGif } from "./mockups";
+import { CommandBarMock, ProductGif } from "./mockups";
 import { PixelScene } from "./pixel";
 
 export function Nav() {
