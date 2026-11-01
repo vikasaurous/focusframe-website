@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, RotateCcw } from "lucide-react";
 import { PixelScene, type Pet } from "./pixel";
 import { Reveal, SectionHead, WindowFrame } from "./shared";
 import { DashboardMock } from "./mockups";
-import snakeAnimation from "@/assets/focusframe-snake.gif.asset.json";
-import snakeStill from "@/assets/focusframe-snake-still.png.asset.json";
 
 const PETS: Pet[] = ["cat", "dog", "dinosaur"];
 
@@ -60,6 +58,9 @@ function Toggle({ on, onClick, children }: { on: boolean; onClick: () => void; c
   );
 }
 
+const SPEEDS = { Slow: 260, Medium: 130, Fast: 60 } as const;
+type Speed = keyof typeof SPEEDS;
+
 function useNow() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => { setNow(new Date()); const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t); }, []);
@@ -68,15 +69,30 @@ function useNow() {
 
 export function YearDots() {
   const now = useNow();
+  const [speed, setSpeed] = useState<Speed>("Medium");
+  const [on, setOn] = useState(true);
+  const [head, setHead] = useState(0);
+  const [len, setLen] = useState(4);
+
   const year = now?.getFullYear() ?? 2026;
   const total = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 366 : 365;
   const doy = now ? Math.floor((Date.UTC(year, now.getMonth(), now.getDate()) - Date.UTC(year, 0, 1)) / 864e5) : 0;
   const done = doy; // days fully completed
 
+  useEffect(() => {
+    if (!on || done < 2) return;
+    const t = setInterval(() => {
+      setHead((h) => (h + 1) % done);
+      setLen((l) => Math.min(l + 0.05, 14));
+    }, SPEEDS[speed]);
+    return () => clearInterval(t);
+  }, [on, speed, done]);
+
   const midnight = now ? new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime() : 0;
   const hh = String(Math.floor(midnight / 36e5)).padStart(2, "0");
   const mm = String(Math.floor((midnight % 36e5) / 6e4)).padStart(2, "0");
   const ss = String(Math.floor((midnight % 6e4) / 1e3)).padStart(2, "0");
+  const snake = (i: number) => on && i < done && ((head - i + done) % done) < Math.floor(len);
 
   return (
     <section className="border-t border-border py-24 lg:py-32">
@@ -90,11 +106,25 @@ export function YearDots() {
             <Stat value={now ? `${hh}:${mm}:${ss}` : "—"} label="until midnight" />
           </Reveal>
         </div>
-        <Reveal className="self-center lg:col-span-8">
-          <picture>
-            <source media="(prefers-reduced-motion: reduce)" srcSet={snakeStill.url} />
-            <img src={snakeAnimation.url} alt="FocusFrame’s coral snake moving through the year-in-dots grid" width={557} height={295} loading="lazy" className="block aspect-[557/295] w-full rounded-md object-contain" />
-          </picture>
+        <Reveal className="lg:col-span-8">
+          <div className="panel p-5 sm:p-8">
+            <div className="mb-5 flex items-center justify-between font-mono text-xs text-muted-foreground">
+              <span>{year}</span><span>{now ? `${Math.round((done / total) * 100)}%` : ""}</span>
+            </div>
+            <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1 sm:grid-cols-[repeat(31,minmax(0,1fr))] sm:gap-1.5" role="img" aria-label={`${done} of ${total} days of ${year} completed`}>
+              {Array.from({ length: total }, (_, i) => (
+                <span key={i} className={`aspect-square rounded-[1px] transition-colors duration-150 ${snake(i) ? "bg-primary" : i < done ? "bg-muted-foreground/60" : i === done ? "bg-foreground" : "bg-border"}`} />
+              ))}
+            </div>
+            <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-border pt-5">
+              <span className="eyebrow mr-2">Snake</span>
+              {(Object.keys(SPEEDS) as Speed[]).map((s) => (
+                <button key={s} onClick={() => setSpeed(s)} aria-pressed={speed === s} className={`min-h-9 rounded border px-3 font-mono text-xs ${speed === s ? "border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}>{s}</button>
+              ))}
+              <button onClick={() => setOn(!on)} aria-pressed={on} className="min-h-9 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground">{on ? "Pause" : "Animate"}</button>
+              <button onClick={() => { setLen(4); setHead(0); }} className="flex min-h-9 items-center gap-1.5 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground"><RotateCcw className="size-3" />Regrow</button>
+            </div>
+          </div>
         </Reveal>
       </div>
     </section>
