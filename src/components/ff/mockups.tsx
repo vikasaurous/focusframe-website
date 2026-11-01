@@ -1,4 +1,19 @@
 import { PixelScene, type Pet } from "./pixel";
+import productGif from "@/assets/focusframe.gif.asset.json";
+
+/** Real product recording of the FocusFrame new-tab dashboard. */
+export function ProductGif() {
+  return (
+    <img
+      src={productGif.url}
+      alt="FocusFrame new-tab dashboard in action"
+      width={1280}
+      height={720}
+      className="block w-full"
+      loading="lazy"
+    />
+  );
+}
 
 /** Code-rendered recreation of the FocusFrame new-tab dashboard (stand-in until original screenshots are supplied). */
 export function DashboardMock({ pet = "cat", night = false }: { pet?: Pet; night?: boolean }) {
