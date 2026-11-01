@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Moon, Sun, RotateCcw } from "lucide-react";
 import { PixelScene, type Pet } from "./pixel";
 import { Reveal, SectionHead, WindowFrame } from "./shared";
