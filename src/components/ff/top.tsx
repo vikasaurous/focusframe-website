@@ -62,7 +62,7 @@ export function Hero() {
         </div>
         <div className="anim-rise relative lg:col-span-7 [animation-delay:150ms]">
           <WindowFrame title="focusframe — new tab">
-            <DashboardMock />
+            <ProductGif />
           </WindowFrame>
           <p className="mt-3 text-right font-mono text-[10px] text-subtle">↳ replaces your browser's empty new-tab page</p>
         </div>
@@ -100,7 +100,7 @@ export function Preview() {
           <div id="preview-panel" role="tabpanel" aria-label={current.label}>
             <WindowFrame title={`focusframe — ${current.label.toLowerCase()}`}>
               <div key={tab} className="anim-rise">
-                {tab === "dashboard" && <DashboardMock />}
+                {tab === "dashboard" && <ProductGif />}
                 {tab === "command" && <CommandBarMock />}
                 {tab === "scene" && <PixelScene night pet="dog" />}
               </div>
