@@ -67,23 +67,59 @@ function useNow() {
   return now;
 }
 
+const COLS = 26;
+const ROWS = 15;
+const GAP = 10;
+
+function neighbours(i: number) {
+  const r = Math.floor(i / COLS), c = i % COLS, out: number[] = [];
+  if (c > 0) out.push(i - 1);
+  if (c < COLS - 1) out.push(i + 1);
+  if (r > 0) out.push(i - COLS);
+  if (r < ROWS - 1) out.push(i + COLS);
+  return out;
+}
+
 export function YearDots() {
   const now = useNow();
   const [speed, setSpeed] = useState<Speed>("Medium");
   const [on, setOn] = useState(true);
-  const [head, setHead] = useState(0);
-  const [len, setLen] = useState(4);
+  const [body, setBody] = useState<number[]>([]);
+  const eaten = useRef<Set<number>>(new Set());
 
   const year = now?.getFullYear() ?? 2026;
   const total = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 366 : 365;
   const doy = now ? Math.floor((Date.UTC(year, now.getMonth(), now.getDate()) - Date.UTC(year, 0, 1)) / 864e5) : 0;
   const done = doy; // days fully completed
 
+  const regrow = () => { eaten.current = new Set(); setBody(done > 1 ? [0] : []); };
+  useEffect(() => { if (done > 1) regrow(); }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (!on || done < 2) return;
     const t = setInterval(() => {
-      setHead((h) => (h + 1) % done);
-      setLen((l) => Math.min(l + 0.05, 14));
+      setBody((prev) => {
+        if (!prev.length) return [0];
+        const head = prev[0];
+        const blocked = new Set(prev.slice(0, -1));
+        // BFS over past days to the nearest uneaten dot
+        const from = new Map<number, number>([[head, -1]]);
+        const q = [head];
+        let target = -1;
+        while (q.length) {
+          const cur = q.shift()!;
+          if (cur !== head && !eaten.current.has(cur)) { target = cur; break; }
+          for (const n of neighbours(cur)) if (n < done && !from.has(n) && !blocked.has(n)) { from.set(n, cur); q.push(n); }
+        }
+        if (target < 0) { eaten.current = new Set(); return [prev[0]]; }
+        let step = target;
+        while (from.get(step) !== head) step = from.get(step)!;
+        const ate = !eaten.current.has(step);
+        eaten.current.add(step);
+        const next = [step, ...prev];
+        const max = Math.min(4 + Math.floor(eaten.current.size / 12), 14);
+        return ate && next.length <= max ? next : next.slice(0, Math.min(next.length - 1, max));
+      });
     }, SPEEDS[speed]);
     return () => clearInterval(t);
   }, [on, speed, done]);
@@ -92,29 +128,35 @@ export function YearDots() {
   const hh = String(Math.floor(midnight / 36e5)).padStart(2, "0");
   const mm = String(Math.floor((midnight % 36e5) / 6e4)).padStart(2, "0");
   const ss = String(Math.floor((midnight % 6e4) / 1e3)).padStart(2, "0");
-  const snake = (i: number) => on && i < done && ((head - i + done) % done) < Math.floor(len);
+  const pt = (i: number) => `${(i % COLS) * GAP + GAP / 2},${Math.floor(i / COLS) * GAP + GAP / 2}`;
+  const path = body.length ? `M${body.map(pt).join(" L")}` : "";
 
   return (
     <section className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-4">
           <SectionHead index="07" label="Year in dots" title="See your year taking shape." >
-            Every dot is a day. Filled ones are behind you; the rest are still yours.
+            Every dot is a day. A little snake roams the days behind you, eating them one by one.
           </SectionHead>
           <Reveal className="mt-10 grid grid-cols-2 gap-6 border-t border-border pt-6">
-            <Stat value={now ? String(total - done) : "—"} label="days remaining" />
+            <Stat value={now ? String(total - done) : "—"} label="days left this year" />
             <Stat value={now ? `${hh}:${mm}:${ss}` : "—"} label="until midnight" />
           </Reveal>
         </div>
         <Reveal className="lg:col-span-8">
           <div className="panel p-5 sm:p-8">
-            <div className="mb-5 flex items-center justify-between font-mono text-xs text-muted-foreground">
-              <span>{year}</span><span>{now ? `${Math.round((done / total) * 100)}%` : ""}</span>
-            </div>
-            <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1 sm:grid-cols-[repeat(31,minmax(0,1fr))] sm:gap-1.5" role="img" aria-label={`${done} of ${total} days of ${year} completed`}>
-              {Array.from({ length: total }, (_, i) => (
-                <span key={i} className={`aspect-square rounded-[1px] transition-colors duration-150 ${snake(i) ? "bg-primary" : i < done ? "bg-muted-foreground/60" : i === done ? "bg-foreground" : "bg-border"}`} />
-              ))}
+            <svg viewBox={`0 0 ${COLS * GAP} ${ROWS * GAP}`} className="w-full" role="img" aria-label={`${done} of ${total} days of ${year} completed`}>
+              {Array.from({ length: total }, (_, i) => {
+                const past = i < done && !eaten.current.has(i);
+                const cls = i === done ? "fill-primary" : past ? "fill-foreground" : "fill-muted-foreground/25";
+                const [x, y] = pt(i).split(",").map(Number);
+                return <circle key={i} cx={x} cy={y} r={i < done || i === done ? 2.6 : 2.2} className={`transition-colors duration-300 ${cls}`} />;
+              })}
+              {path && <path d={path} fill="none" strokeWidth={3.6} strokeLinecap="round" strokeLinejoin="round" className="stroke-primary" />}
+            </svg>
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+              <span className="flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-primary" />{now ? `${total - done} days left this year` : ""}</span>
+              <span>·</span><span>{year} · day {done + 1}</span>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-border pt-5">
               <span className="eyebrow mr-2">Snake</span>
@@ -122,7 +164,7 @@ export function YearDots() {
                 <button key={s} onClick={() => setSpeed(s)} aria-pressed={speed === s} className={`min-h-9 rounded border px-3 font-mono text-xs ${speed === s ? "border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}>{s}</button>
               ))}
               <button onClick={() => setOn(!on)} aria-pressed={on} className="min-h-9 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground">{on ? "Pause" : "Animate"}</button>
-              <button onClick={() => { setLen(4); setHead(0); }} className="flex min-h-9 items-center gap-1.5 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground"><RotateCcw className="size-3" />Regrow</button>
+              <button onClick={regrow} className="flex min-h-9 items-center gap-1.5 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground"><RotateCcw className="size-3" />Regrow</button>
             </div>
           </div>
         </Reveal>
