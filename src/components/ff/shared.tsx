@@ -41,13 +41,15 @@ export function FirefoxButton({ label = "Add to Firefox", className = "" }: { la
   );
 }
 
-export function BrandMark({ className = "size-5" }: { className?: string }) {
+export function BrandMark({ className = "size-6" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 8 8" shapeRendering="crispEdges" className={className} aria-hidden>
-      <rect x="0" y="0" width="8" height="8" fill="var(--primary)" />
-      <rect x="1" y="1" width="6" height="6" fill="var(--background)" />
-      <rect x="3" y="3" width="2" height="2" fill="var(--primary)" />
-    </svg>
+    <img
+      src="/icon128.png"
+      alt="FocusFrame"
+      width={24}
+      height={24}
+      className={className}
+    />
   );
 }
 
