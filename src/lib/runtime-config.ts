@@ -116,9 +116,9 @@ export type CatRuntimeConfig = Pick<
   | "onToss"
   | "onTreat"
 > & {
-  zones?: readonly OnekoZone[];
-  zoneAttractionChance?: number;
-  zoneAttractionDuration?: number;
+  zones?: readonly OnekoZone[] | undefined;
+  zoneAttractionChance?: number | undefined;
+  zoneAttractionDuration?: number | undefined;
   speed: number;
   scale: number;
   opacity: number;

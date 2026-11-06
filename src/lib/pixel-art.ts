@@ -5,14 +5,17 @@ const OUTLINE = "#1b1b1b";
  * sprite's dark ink so it reads on light and dark pages. The result is one pixel larger on each side.
  */
 export function pixelArtSVG(rows: readonly string[], colors: Record<string, string>): string {
-  const width = rows[0].length + 2;
+  const firstRow = rows[0] ?? "";
+  const width = firstRow.length + 2;
   const height = rows.length + 2;
   const filled = (x: number, y: number) => Boolean(colors[rows[y]?.[x] ?? "."]);
   const rects: string[] = [];
   for (let y = -1; y <= rows.length; y++) {
-    for (let x = -1; x <= rows[0].length; x++) {
-      const fill = filled(x, y)
-        ? colors[rows[y][x]]
+    const row = rows[y];
+    for (let x = -1; x <= firstRow.length; x++) {
+      const color = colors[row?.[x] ?? "."];
+      const fill = color
+        ? color
         : filled(x - 1, y) || filled(x + 1, y) || filled(x, y - 1) || filled(x, y + 1)
           ? OUTLINE
           : null;

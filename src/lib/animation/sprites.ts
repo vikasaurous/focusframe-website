@@ -12,6 +12,9 @@ export function setSprite(
     return;
   }
   const sprite = sprites[frame % sprites.length];
+  if (!sprite) {
+    return;
+  }
   deps.el.style.backgroundPosition = `${sprite[0] * TILE}px ${sprite[1] * TILE}px`;
   if (deps.hat) {
     const offset = hatOffset(sprite[0], sprite[1]);

@@ -55,6 +55,6 @@ export const GREETINGS: Record<ReturnType<typeof affectionTier>, readonly string
 /** A greeting for a visitor, or null when they were here a moment ago. */
 export function greetingFor(saved: SavedAffection | null, now = Date.now()): string | null {
   if (saved && now - saved.lastVisit < GREETING_GAP_MS) return null;
-  const pool = GREETINGS[affectionTier(saved?.affection ?? 0)];
-  return pool[Math.floor(Math.random() * pool.length)];
+  const pool = GREETINGS[affectionTier(saved?.affection ?? 0)] ?? [];
+  return pool[Math.floor(Math.random() * pool.length)] ?? null;
 }

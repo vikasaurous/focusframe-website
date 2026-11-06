@@ -21,12 +21,12 @@ export interface StartCatAnimationOptions {
   elRef: { current: HTMLDivElement | null };
   lastStateRef: { current: CatActivityState };
   onStateChangeRef: { current: ((state: CatActivityState) => void) | undefined };
-  liveStateRef?: { current: CatLiveState };
+  liveStateRef?: { current: CatLiveState } | undefined;
   persistPosition: boolean;
-  storageKey?: string;
+  storageKey?: string | undefined;
   zIndex: number;
   /** Make the cat a keyboard-reachable "Pet the cat" button. */
-  pettable?: boolean;
+  pettable?: boolean | undefined;
 }
 
 function createDebugWrapper(

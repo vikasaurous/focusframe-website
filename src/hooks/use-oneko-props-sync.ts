@@ -8,7 +8,7 @@ import type { CatRuntimeState } from "@/lib/types";
 type SyncableProps = CatRuntimeConfig & {
   hueRotate: number;
   skin: OnekoSkin;
-  spriteSrc?: string;
+  spriteSrc?: string | undefined;
 };
 
 export function useOnekoPropsSync(

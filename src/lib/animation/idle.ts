@@ -24,7 +24,7 @@ function pickRandomIdleAnimation(s: CatRuntimeState): IdleActivityState {
     ...(s.sleepEnabledCfg ? ["tired" as const] : []),
     ...wallScratchAnimations(s),
   ];
-  return available[Math.floor(Math.random() * available.length)];
+  return available[Math.floor(Math.random() * available.length)] ?? "scratchSelf";
 }
 
 function startSleepingAnimation(deps: CatAnimationDeps) {

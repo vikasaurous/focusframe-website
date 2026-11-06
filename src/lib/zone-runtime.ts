@@ -131,8 +131,11 @@ export function updateZoneTarget(
     zones.cooldownFrames = 50;
     if (favorites.length && random() < zones.chance) {
       const index = Math.min(favorites.length - 1, Math.floor(random() * favorites.length));
-      zones.targetId = favorites[index].id;
-      zones.visitFrames = zones.duration;
+      const target = favorites[index];
+      if (target) {
+        zones.targetId = target.id;
+        zones.visitFrames = zones.duration;
+      }
     }
   }
   const favorite = favorites.find((zone) => zone.id === zones.targetId);

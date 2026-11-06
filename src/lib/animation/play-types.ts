@@ -9,7 +9,7 @@ export type Errand =
       target: Element | PointLike;
       frames: number;
       arrived: boolean;
-      resolve?: (arrived: boolean) => void;
+      resolve?: ((arrived: boolean) => void) | undefined;
     }
   | { kind: "sit" }
   | { kind: "treat"; treat: Treat; frames: number }

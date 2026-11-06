@@ -99,8 +99,8 @@ export function YearDots() {
     if (!on || done < 2) return;
     const t = setInterval(() => {
       setBody((prev) => {
-        if (!prev.length) return [0];
         const head = prev[0];
+        if (head === undefined) return [0];
         const blocked = new Set(prev.slice(0, -1));
         // BFS over past days to the nearest uneaten dot
         const from = new Map<number, number>([[head, -1]]);
@@ -111,7 +111,7 @@ export function YearDots() {
           if (cur !== head && !eaten.current.has(cur)) { target = cur; break; }
           for (const n of neighbours(cur)) if (n < done && !from.has(n) && !blocked.has(n)) { from.set(n, cur); q.push(n); }
         }
-        if (target < 0) { eaten.current = new Set(); return [prev[0]]; }
+        if (target < 0) { eaten.current = new Set(); return [head]; }
         let step = target;
         while (from.get(step) !== head) step = from.get(step)!;
         const ate = !eaten.current.has(step);

@@ -50,7 +50,7 @@ function speak(deps: CatAnimationDeps, pool: readonly string[]) {
   s.bubbleVisible = true;
   s.bubbleTimer = s.bubbleDisplayFramesCfg;
   s.bubbleCooldown = 0;
-  deps.bubbleTextEl.textContent = pickFromPool(deps, pool);
+  deps.bubbleTextEl.textContent = pickFromPool(deps, pool) ?? "";
   deps.bubbleEl.style.opacity = "1";
 }
 

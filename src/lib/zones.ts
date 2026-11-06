@@ -137,10 +137,11 @@ export function constrainZoneMovement(
     let enter = -Infinity,
       leave = Infinity;
     let misses = false;
-    for (const [position, delta, min, max] of [
+    const axes: readonly [number, number, number, number][] = [
       [from.x, dx, rect.left, rect.right],
       [from.y, dy, rect.top, rect.bottom],
-    ]) {
+    ];
+    for (const [position, delta, min, max] of axes) {
       if (Math.abs(delta) < 1e-9) {
         if (position <= min || position >= max) {
           misses = true;

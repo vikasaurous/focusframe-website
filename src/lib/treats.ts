@@ -60,7 +60,7 @@ export function dropTreat(x: number, y: number, zIndex: number): Treat {
   );
   const treat = { x: clampedX, y: clampedY, el, eaten: false };
   treats.push(treat);
-  while (treats.length > MAX_TREATS) removeTreat(treats[0]);
+  while (treats.length > MAX_TREATS) removeOldestTreat();
   return treat;
 }
 
@@ -71,6 +71,13 @@ function removeTreat(treat: Treat) {
   if (index !== -1) treats.splice(index, 1);
 }
 
+/** Drop the oldest treat so the list stays under MAX_TREATS. */
+function removeOldestTreat() {
+  const oldest = treats[0];
+  if (!oldest) return;
+  removeTreat(oldest);
+}
+
 /** Eat a treat. Returns false when another cat got there first. */
 export function eatTreat(treat: Treat): boolean {
   if (treat.eaten) return false;
@@ -79,5 +86,5 @@ export function eatTreat(treat: Treat): boolean {
 }
 
 export function clearTreats(): void {
-  while (treats.length) removeTreat(treats[0]);
+  while (treats.length) removeOldestTreat();
 }

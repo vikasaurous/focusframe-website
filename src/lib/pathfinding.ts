@@ -83,6 +83,7 @@ export function nearestWalkable(
 
   while (head < queue.length) {
     const idx = queue[head++];
+    if (idx === undefined) break;
     const r = Math.floor(idx / cols);
     const c = idx % cols;
 
@@ -106,12 +107,13 @@ function heapBubble(data: [number, number][], i: number): void {
   let idx = i;
   while (idx > 0) {
     const parent = Math.floor((idx - 1) / 2);
-    if (data[parent][0] <= data[idx][0]) {
+    const parentItem = data[parent];
+    const item = data[idx];
+    if (!parentItem || !item || parentItem[0] <= item[0]) {
       break;
     }
-    const tmp = data[parent];
-    data[parent] = data[idx];
-    data[idx] = tmp;
+    data[parent] = item;
+    data[idx] = parentItem;
     idx = parent;
   }
 }
@@ -121,44 +123,61 @@ function heapSink(data: [number, number][], i: number): void {
   let idx = i;
 
   for (let step = 0; step < n; step++) {
+    const item = data[idx];
+    if (!item) {
+      break;
+    }
     let smallest = idx;
+    let smallestCost = item[0];
     const left = 2 * idx + 1;
     const right = 2 * idx + 2;
-    if (left < n && data[left][0] < data[smallest][0]) {
+    const leftItem = left < n ? data[left] : undefined;
+    if (leftItem && leftItem[0] < smallestCost) {
       smallest = left;
+      smallestCost = leftItem[0];
     }
-    if (right < n && data[right][0] < data[smallest][0]) {
+    const rightItem = right < n ? data[right] : undefined;
+    if (rightItem && rightItem[0] < smallestCost) {
       smallest = right;
+      smallestCost = rightItem[0];
     }
     if (smallest === idx) {
       break;
     }
-    const tmp = data[smallest];
-    data[smallest] = data[idx];
-    data[idx] = tmp;
+    const smallestItem = data[smallest];
+    if (!smallestItem) {
+      break;
+    }
+    data[smallest] = item;
+    data[idx] = smallestItem;
     idx = smallest;
   }
 }
 
 function smoothPath(rawPath: number[], cols: number): PathPoint[] {
   const points = rawPath.map((idx) => cellToWorld(idx, cols));
-  if (points.length <= 2) {
+  const first = points[0];
+  const last = points.at(-1);
+  if (points.length <= 2 || !first || !last) {
     return points;
   }
 
-  const result: PathPoint[] = [points[0]];
+  const result: PathPoint[] = [first];
 
   for (let i = 1; i < points.length - 1; i++) {
-    const prev = result.at(-1) as PathPoint;
+    const prev = result.at(-1);
     const cur = points[i];
     const next = points[i + 1];
+    if (!prev || !cur || !next) {
+      continue;
+    }
     const cross = (cur.x - prev.x) * (next.y - cur.y) - (cur.y - prev.y) * (next.x - cur.x);
     if (Math.abs(cross) > 1e-6) {
       result.push(cur);
     }
   }
 
-  result.push(points.at(-1) as PathPoint);
+  result.push(last);
   return result;
 }
 
@@ -179,9 +198,15 @@ function relaxNeighbors(
     if (nIdx === -1 || grid[nIdx] === 1) {
       continue;
     }
-    if (dr !== 0 && dc !== 0 && (grid[r * cols + c + dc] || grid[(r + dr) * cols + c])) continue;
-    const newDist = dist[idx] + edgeCost;
-    if (newDist < dist[nIdx]) {
+    if (
+      dr !== 0 &&
+      dc !== 0 &&
+      (grid[r * cols + c + dc] === 1 || grid[(r + dr) * cols + c] === 1)
+    ) {
+      continue;
+    }
+    const newDist = (dist[idx] ?? Number.POSITIVE_INFINITY) + edgeCost;
+    if (newDist < (dist[nIdx] ?? Number.POSITIVE_INFINITY)) {
       dist[nIdx] = newDist;
       prev[nIdx] = idx;
       heap.push([newDist, nIdx]);
@@ -215,7 +240,7 @@ function searchRoute(
     if (idx === goalIdx) {
       break;
     }
-    if (cost > dist[idx]) {
+    if (cost > (dist[idx] ?? Number.POSITIVE_INFINITY)) {
       continue;
     }
 
@@ -227,8 +252,8 @@ function searchRoute(
 
 function reconstructCellPath(prev: Int32Array, goalIdx: number): number[] {
   const rawPath: number[] = [];
-  let cur = goalIdx;
-  while (cur !== -1) {
+  let cur: number | undefined = goalIdx;
+  while (cur !== undefined && cur !== -1) {
     rawPath.push(cur);
     cur = prev[cur];
   }

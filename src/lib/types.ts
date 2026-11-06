@@ -36,98 +36,98 @@ export interface CatLiveState {
 
 export interface OnekoProps {
   /** Freeze animation in place without unmounting. Default false. */
-  paused?: boolean;
+  paused?: boolean | undefined;
   /** Chase the pointer and visit favorite spots. False keeps the cat resting in place. Default true. */
-  followCursor?: boolean;
+  followCursor?: boolean | undefined;
   /** Allow the cat to nap while idle. Default true. */
-  sleepEnabled?: boolean;
+  sleepEnabled?: boolean | undefined;
   /** Preferred bubble side; auto chooses the side with room. Default auto. */
-  bubblePlacement?: "auto" | "above" | "below";
+  bubblePlacement?: "auto" | "above" | "below" | undefined;
   /** Bubble size multiplier, in addition to scale (0.5–2). Default 1. */
-  bubbleScale?: number;
+  bubbleScale?: number | undefined;
   /** Directory URL for the optional .ogg sounds. Default /cat-sounds. */
-  soundBasePath?: string;
+  soundBasePath?: string | undefined;
   /** localStorage key for position persistence. Default oneko. */
-  storageKey?: string;
+  storageKey?: string | undefined;
   /** Strict keep-out areas and occasional favorite spots. DOM data-oneko-zone attributes also work. */
-  zones?: readonly OnekoZone[];
+  zones?: readonly OnekoZone[] | undefined;
   /** Chance to visit a favorite at each five-second check (0–1). Default 0.3. */
-  zoneAttractionChance?: number;
+  zoneAttractionChance?: number | undefined;
   /** Time spent pursuing a favorite, in milliseconds. Default 4000. */
-  zoneAttractionDuration?: number;
+  zoneAttractionDuration?: number | undefined;
   /** Built-in pixel-art skin. Default classic. */
-  skin?: OnekoSkin;
+  skin?: OnekoSkin | undefined;
   /** Custom 256×128 sprite-sheet URL using the classic 8×4 layout. Overrides skin. */
-  spriteSrc?: string;
-  persistPosition?: boolean;
-  zIndex?: number;
-  initialPos?: { x: number; y: number };
-  speed?: number;
-  scale?: number;
-  opacity?: number;
-  rotationAmount?: number;
-  idleThreshold?: number;
+  spriteSrc?: string | undefined;
+  persistPosition?: boolean | undefined;
+  zIndex?: number | undefined;
+  initialPos?: { x: number; y: number } | undefined;
+  speed?: number | undefined;
+  scale?: number | undefined;
+  opacity?: number | undefined;
+  rotationAmount?: number | undefined;
+  idleThreshold?: number | undefined;
   /** Enable optional sound assets supplied by the host app. Default false. */
-  meow?: boolean;
-  onStateChange?: (state: CatActivityState) => void;
+  meow?: boolean | undefined;
+  onStateChange?: ((state: CatActivityState) => void) | undefined;
   /** Probability per frame cat enters freerun mode (0–1). Default 0.06 */
-  freerunChance?: number;
+  freerunChance?: number | undefined;
   /** Duration of freerun in frames. Default 40 */
-  freerunDuration?: number;
+  freerunDuration?: number | undefined;
   /** Whether chat bubbles are enabled. Default true */
-  bubbleEnabled?: boolean;
+  bubbleEnabled?: boolean | undefined;
   /** How many frames a bubble stays visible. Default 180 */
-  bubbleDisplayFrames?: number;
+  bubbleDisplayFrames?: number | undefined;
   /** Cooldown frames between bubbles. Default 120 */
-  bubbleCooldown?: number;
+  bubbleCooldown?: number | undefined;
   /** CSS hue-rotate degrees (0–360). Default 0 */
-  hueRotate?: number;
+  hueRotate?: number | undefined;
   /** Mutable ref that oneko writes live state to every frame */
-  liveStateRef?: { current: CatLiveState };
+  liveStateRef?: { current: CatLiveState } | undefined;
   /** Bubble trigger probability while idle (0–1). Default 0.5 */
-  bubbleChance?: number;
+  bubbleChance?: number | undefined;
   /** Distance in px at which cat stops chasing cursor. Default 20 */
-  followDistance?: number;
+  followDistance?: number | undefined;
   /** Multiplier for idle animation speed (0.5–2). Default 1 */
-  animationSpeed?: number;
+  animationSpeed?: number | undefined;
   /** Custom awake bubble text, or a pool of thoughts picked without immediate repeats. */
-  bubbleText?: string | readonly string[];
+  bubbleText?: string | readonly string[] | undefined;
   /** Sound volume (0–1). Default 0.5 */
-  volume?: number;
+  volume?: number | undefined;
   /** Show a red laser dot in place of the system cursor. Default false */
-  laserPointer?: boolean;
+  laserPointer?: boolean | undefined;
   /** With reduced motion: "hide" the cat, or let it "rest" as a still, sleeping sprite. Default "hide" */
-  reducedMotion?: "hide" | "rest";
+  reducedMotion?: "hide" | "rest" | undefined;
   /** What to chase: the cursor, or the cat mounted just before this one. Default "cursor" */
-  chase?: "cursor" | "cat";
+  chase?: "cursor" | "cat" | undefined;
   /** Doze off while the visitor types in a field; wake on the next pointer move. Default false */
-  napWhileTyping?: boolean;
+  napWhileTyping?: boolean | undefined;
   /** Walk over to whatever receives keyboard focus. Default false */
-  followFocus?: boolean;
+  followFocus?: boolean | undefined;
   /** Sit on a link or button after the pointer rests on it. Default false */
-  perchOnHover?: boolean;
+  perchOnHover?: boolean | undefined;
   /** Make the cat a keyboard-reachable "Pet the cat" button. Default false */
-  pettable?: boolean;
+  pettable?: boolean | undefined;
   /** Wear a holiday hat around Halloween, the winter holidays, and New Year. A season name forces it. Default true */
-  seasonal?: boolean | OnekoSeason;
+  seasonal?: boolean | OnekoSeason | undefined;
   /** Let visitors pick the cat up and toss it; a click without dragging pets it. Default false */
-  grabbable?: boolean;
+  grabbable?: boolean | undefined;
   /** Double-click empty page space to drop a treat the cat runs over to eat. Default false */
-  treats?: boolean;
+  treats?: boolean | undefined;
   /** Follow the visitor's clock: zoomies at dawn and dusk, sleepy late at night. Default false */
-  timeOfDay?: boolean;
+  timeOfDay?: boolean | undefined;
   /** Remember pets and treats in localStorage and greet returning visitors. Default false */
-  affection?: boolean;
+  affection?: boolean | undefined;
   /** Called when the cat is petted by keyboard, click, or pet(). */
-  onPet?: (detail: { affection: number }) => void;
+  onPet?: ((detail: { affection: number }) => void) | undefined;
   /** Called when the cat catches up with the cursor after a chase. */
-  onCatchCursor?: () => void;
+  onCatchCursor?: (() => void) | undefined;
   /** Called when the cat falls asleep. */
-  onSleep?: () => void;
+  onSleep?: (() => void) | undefined;
   /** Called when a visitor throws the cat; speed is in CSS pixels per second. */
-  onToss?: (detail: { speed: number }) => void;
+  onToss?: ((detail: { speed: number }) => void) | undefined;
   /** Called when the cat eats a treat. */
-  onTreat?: (detail: { affection: number }) => void;
+  onTreat?: ((detail: { affection: number }) => void) | undefined;
 }
 
 /** Event callbacks, kept in the runtime state so they update without a restart. */
