@@ -98,11 +98,13 @@ export function mountLaserCursor(zIndex: number): () => void {
     if (history.length > TRAIL_LEN + 1) {
       history.pop();
     }
-    const d0 = history[0];
+    const d0 = history[0] ?? { x: pointerX, y: pointerY };
     dot.style.transform = `translate(-50%,-50%) translate(${d0.x}px, ${d0.y}px)`;
     for (let i = 0; i < trail.length; i++) {
-      const p = history[i + 1] ?? history[history.length - 1];
-      trail[i].style.transform = `translate(-50%,-50%) translate(${p.x}px, ${p.y}px)`;
+      const dotEl = trail[i];
+      if (!dotEl) continue;
+      const p = history[i + 1] ?? history[history.length - 1] ?? { x: pointerX, y: pointerY };
+      dotEl.style.transform = `translate(-50%,-50%) translate(${p.x}px, ${p.y}px)`;
     }
     rafId = window.requestAnimationFrame(tick);
   };

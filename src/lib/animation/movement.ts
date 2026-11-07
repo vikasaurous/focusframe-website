@@ -49,13 +49,18 @@ function getNextWaypointTarget(deps: CatAnimationDeps) {
   }
   while (s.pathWaypointIdx < path.length - 1) {
     const wp = path[s.pathWaypointIdx];
+    if (!wp) break;
     if (Math.hypot(wp.x - s.nekoPosX, wp.y - s.nekoPosY) < WAYPOINT_REACH_DIST) {
       s.pathWaypointIdx++;
     } else {
       break;
     }
   }
-  return path[s.pathWaypointIdx];
+  return (
+    path[s.pathWaypointIdx] ??
+    path.at(-1) ??
+    { x: s.zoneState.movementTarget.x, y: s.zoneState.movementTarget.y }
+  );
 }
 
 function moveToward(deps: CatAnimationDeps, targetX: number, targetY: number) {
@@ -127,7 +132,7 @@ function enterFreerun(deps: CatAnimationDeps) {
   s.bubbleVisible = true;
   s.bubbleTimer = s.freerunDurationCfg;
   s.bubbleCooldown = 0;
-  deps.bubbleTextEl.textContent = pickFreerunMessage(deps);
+  deps.bubbleTextEl.textContent = pickFreerunMessage(deps) ?? "";
   deps.bubbleEl.style.opacity = "1";
 }
 

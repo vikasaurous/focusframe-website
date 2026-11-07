@@ -7,9 +7,10 @@ export type PersistedPosition = { version: 1; x: number; y: number };
 export function parsePersistedPosition(value: unknown): PersistedPosition | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const record = value as Record<string, unknown>;
-  if (record.version !== undefined && record.version !== 1) return null;
-  const x = record.version === 1 ? record.x : record.nekoPosX;
-  const y = record.version === 1 ? record.y : record.nekoPosY;
+  const version = record["version"];
+  if (version !== undefined && version !== 1) return null;
+  const x = version === 1 ? record["x"] : record["nekoPosX"];
+  const y = version === 1 ? record["y"] : record["nekoPosY"];
   if (typeof x !== "number" || !Number.isFinite(x)) return null;
   if (typeof y !== "number" || !Number.isFinite(y)) return null;
   return { version: 1, x, y };

@@ -91,15 +91,25 @@ export interface OnekoProps {
   /** Multiplier for idle animation speed (0.5–2). Default 1 */
   animationSpeed?: number | undefined;
   /** Custom awake bubble text, or a pool of thoughts picked without immediate repeats. */
+<<<<<<< HEAD
   bubbleText?: (string | readonly string[]) | undefined;
+=======
+  bubbleText?: string | readonly string[] | undefined;
+>>>>>>> origin/main
   /** Sound volume (0–1). Default 0.5 */
   volume?: number | undefined;
   /** Show a red laser dot in place of the system cursor. Default false */
   laserPointer?: boolean | undefined;
   /** With reduced motion: "hide" the cat, or let it "rest" as a still, sleeping sprite. Default "hide" */
+<<<<<<< HEAD
   reducedMotion?: ("hide" | "rest") | undefined;
   /** What to chase: the cursor, or the cat mounted just before this one. Default "cursor" */
   chase?: ("cursor" | "cat") | undefined;
+=======
+  reducedMotion?: "hide" | "rest" | undefined;
+  /** What to chase: the cursor, or the cat mounted just before this one. Default "cursor" */
+  chase?: "cursor" | "cat" | undefined;
+>>>>>>> origin/main
   /** Doze off while the visitor types in a field; wake on the next pointer move. Default false */
   napWhileTyping?: boolean | undefined;
   /** Walk over to whatever receives keyboard focus. Default false */
@@ -109,7 +119,11 @@ export interface OnekoProps {
   /** Make the cat a keyboard-reachable "Pet the cat" button. Default false */
   pettable?: boolean | undefined;
   /** Wear a holiday hat around Halloween, the winter holidays, and New Year. A season name forces it. Default true */
+<<<<<<< HEAD
   seasonal?: (boolean | OnekoSeason) | undefined;
+=======
+  seasonal?: boolean | OnekoSeason | undefined;
+>>>>>>> origin/main
   /** Let visitors pick the cat up and toss it; a click without dragging pets it. Default false */
   grabbable?: boolean | undefined;
   /** Double-click empty page space to drop a treat the cat runs over to eat. Default false */
