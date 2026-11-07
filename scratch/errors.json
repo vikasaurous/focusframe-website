@@ -1,0 +1,275 @@
+[
+  {
+    "raw": "src/components/oneko.tsx(153,63): error TS2379: Argument of type '{ paused: boolean; followCursor: boolean; sleepEnabled: boolean; bubblePlacement: \"auto\" | \"above\" | \"below\"; bubbleScale: number; soundBasePath: string; zones: readonly OnekoZone[] | undefined; ... 33 more ...; initialPos: { ...; } | undefined; }' is not assignable to parameter of type 'InitialCatStateOptions' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/components/oneko.tsx(157,19): error TS2379: Argument of type '{ enabled: boolean; stateRef: React.RefObject<CatRuntimeState>; elRef: React.RefObject<HTMLDivElement | null>; lastStateRef: React.RefObject<...>; ... 5 more ...; pettable: boolean; }' is not assignable to parameter of type 'StartCatAnimationOptions & { enabled: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/components/oneko.tsx(169,38): error TS2379: Argument of type '{ hueRotate: number; skin: \"classic\" | \"black\" | \"gray\" | \"calico\" | \"tora\" | \"catppuccin\" | \"ghost\" | \"silver\" | \"spirit\" | \"valentine\" | \"maia\" | \"vaporwave\" | \"ginger\" | \"sage\" | ... 9 more ... | \"midnight-blue\"; ... 40 more ...; onTreat: ((detail: { affection: number; }) => void) | undefined; }' is not assignable to parameter of type 'SyncableProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/components/oneko.tsx(178,8): error TS2375: Type '{ source: string; position: { x: number; y: number; } | undefined; scale: number; opacity: number; hueRotate: number; zIndex: number; }' is not assignable to type '{ source: string; position?: { x: number; y: number; }; scale: number; opacity: number; hueRotate: number; zIndex: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/hooks/use-cat-animation.ts(21,30): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; elRef: { current: HTMLDivElement | null; }; lastStateRef: { current: CatActivityState; }; ... 5 more ...; pettable: boolean | undefined; }' is not assignable to parameter of type 'StartCatAnimationOptions' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/affection.ts(59,3): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.\r"
+  },
+  {
+    "raw": "src/lib/animation/activity.ts(38,20): error TS18048: 'url' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/activity.ts(38,30): error TS18048: 'url' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/bubbles.ts(61,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.\r"
+  },
+  {
+    "raw": "src/lib/animation/bubbles.ts(64,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.\r"
+  },
+  {
+    "raw": "src/lib/animation/bubbles.ts(67,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.\r"
+  },
+  {
+    "raw": "src/lib/animation/bubbles.ts(69,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.\r"
+  },
+  {
+    "raw": "src/lib/animation/idle.ts(27,3): error TS2322: Type 'IdleActivityState | undefined' is not assignable to type 'IdleActivityState'.\r"
+  },
+  {
+    "raw": "src/lib/animation/idle.ts(34,5): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.\r"
+  },
+  {
+    "raw": "src/lib/animation/movement.ts(52,20): error TS18048: 'wp' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/movement.ts(52,39): error TS18048: 'wp' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/movement.ts(130,3): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.\r"
+  },
+  {
+    "raw": "src/lib/animation/movement.ts(172,20): error TS18048: 'target' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/movement.ts(172,30): error TS18048: 'target' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/play.ts(53,3): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.\r"
+  },
+  {
+    "raw": "src/lib/animation/play.ts(175,5): error TS2412: Type 'undefined' is not assignable to type 'HTMLDivElement' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.\r"
+  },
+  {
+    "raw": "src/lib/animation/play.ts(325,11): error TS2412: Type 'undefined' is not assignable to type '(arrived: boolean) => void' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.\r"
+  },
+  {
+    "raw": "src/lib/animation/play.ts(612,5): error TS2412: Type 'undefined' is not assignable to type 'HTMLDivElement' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.\r"
+  },
+  {
+    "raw": "src/lib/animation/sprites.ts(15,41): error TS18048: 'sprite' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/sprites.ts(15,63): error TS18048: 'sprite' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/sprites.ts(17,30): error TS18048: 'sprite' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/animation/sprites.ts(17,41): error TS18048: 'sprite' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/laser-cursor-dom.ts(102,61): error TS18048: 'd0' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/laser-cursor-dom.ts(102,72): error TS18048: 'd0' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/laser-cursor-dom.ts(105,7): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/laser-cursor-dom.ts(105,68): error TS18048: 'p' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/laser-cursor-dom.ts(105,78): error TS18048: 'p' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(86,26): error TS18048: 'idx' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(87,15): error TS18048: 'idx' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(109,9): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(109,28): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(113,5): error TS2322: Type '[number, number] | undefined' is not assignable to type '[number, number]'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(114,5): error TS2322: Type '[number, number] | undefined' is not assignable to type '[number, number]'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(127,21): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(127,37): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(130,22): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(130,39): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(137,5): error TS2322: Type '[number, number] | undefined' is not assignable to type '[number, number]'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(138,5): error TS2322: Type '[number, number] | undefined' is not assignable to type '[number, number]'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(149,32): error TS2322: Type 'PathPoint | undefined' is not assignable to type 'PathPoint'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(155,20): error TS18048: 'cur' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(155,39): error TS18048: 'next' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(155,48): error TS18048: 'cur' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(155,58): error TS18048: 'cur' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(155,77): error TS18048: 'next' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(155,86): error TS18048: 'cur' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(157,19): error TS2345: Argument of type 'PathPoint | undefined' is not assignable to parameter of type 'PathPoint'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(183,21): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(184,19): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(218,16): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pathfinding.ts(233,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(10,14): error TS4111: Property 'version' comes from an index signature, so it must be accessed with ['version'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(10,46): error TS4111: Property 'version' comes from an index signature, so it must be accessed with ['version'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(11,20): error TS4111: Property 'version' comes from an index signature, so it must be accessed with ['version'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(11,43): error TS4111: Property 'x' comes from an index signature, so it must be accessed with ['x'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(11,54): error TS4111: Property 'nekoPosX' comes from an index signature, so it must be accessed with ['nekoPosX'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(12,20): error TS4111: Property 'version' comes from an index signature, so it must be accessed with ['version'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(12,43): error TS4111: Property 'y' comes from an index signature, so it must be accessed with ['y'].\r"
+  },
+  {
+    "raw": "src/lib/persistence.ts(12,54): error TS4111: Property 'nekoPosY' comes from an index signature, so it must be accessed with ['nekoPosY'].\r"
+  },
+  {
+    "raw": "src/lib/pixel-art.ts(8,17): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pixel-art.ts(13,27): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pixel-art.ts(15,18): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/pixel-art.ts(15,18): error TS2538: Type 'undefined' cannot be used as an index type.\r"
+  },
+  {
+    "raw": "src/lib/runtime-config.ts(203,3): error TS2375: Type '{ onPet: ((detail: { affection: number; }) => void) | undefined; onCatchCursor: (() => void) | undefined; onSleep: (() => void) | undefined; onToss: ((detail: { speed: number; }) => void) | undefined; onTreat: ((detail: { affection: number; }) => void) | undefined; }' is not assignable to type 'OnekoEventHandlers' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(88,27): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(89,33): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(96,34): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(97,34): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(106,16): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(113,46): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(148,38): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/start-cat-animation.ts(149,47): error TS2379: Argument of type '{ stateRef: { current: CatRuntimeState; }; el: HTMLDivElement; bubbleEl: HTMLDivElement; bubbleTextEl: HTMLDivElement; bubbleTail: HTMLDivElement; ... 4 more ...; liveStateRef: { ...; } | undefined; }' is not assignable to parameter of type 'CatAnimationDeps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.\r"
+  },
+  {
+    "raw": "src/lib/treats.ts(63,50): error TS2345: Argument of type 'Treat | undefined' is not assignable to parameter of type 'Treat'.\r"
+  },
+  {
+    "raw": "src/lib/treats.ts(82,37): error TS2345: Argument of type 'Treat | undefined' is not assignable to parameter of type 'Treat'.\r"
+  },
+  {
+    "raw": "src/lib/zone-runtime.ts(134,24): error TS2532: Object is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(144,20): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(145,13): error TS18048: 'position' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(145,25): error TS18048: 'min' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(145,32): error TS18048: 'position' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(145,44): error TS18048: 'max' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(150,20): error TS18048: 'min' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(150,26): error TS18048: 'position' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(150,38): error TS18048: 'delta' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(151,16): error TS18048: 'max' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(151,22): error TS18048: 'position' is possibly 'undefined'.\r"
+  },
+  {
+    "raw": "src/lib/zones.ts(151,34): error TS18048: 'delta' is possibly 'undefined'.\r"
+  }
+]

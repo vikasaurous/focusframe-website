@@ -1,5 +1,5 @@
 // Central product + link configuration. Store URLs stay empty until real listings exist.
-export const FIREFOX_ADDON_URL = "";
+export const FIREFOX_ADDON_URL = "https://addons.mozilla.org/en-US/firefox/addon/focusframe/";
 export const CHROME_STORE_URL = "";
 export const EDGE_ADDONS_URL = "";
 

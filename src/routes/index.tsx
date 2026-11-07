@@ -4,9 +4,10 @@ import { LayoutSection, Modules } from "@/components/ff/modules";
 import { CommandSection } from "@/components/ff/command";
 import { Personalize, PixelWorld, YearDots } from "@/components/ff/world";
 import { Browsers, Faq, FinalCta, Footer, HowItWorks, Privacy } from "@/components/ff/bottom";
+import { LiveDemo } from "@/components/ff/demo";
 import { PRODUCT } from "@/config/site";
 
-const TITLE = "FocusFrame — Make Every New Tab Count";
+const TITLE = "FocusFrame | Make Every New Tab Count";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,6 +33,7 @@ function Index() {
       <main id="main">
         <Hero />
         <Preview />
+        <LiveDemo />
         <Statement />
         <Modules />
         <LayoutSection />

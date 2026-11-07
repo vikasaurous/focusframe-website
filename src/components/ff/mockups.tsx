@@ -1,17 +1,23 @@
 import { PixelScene, type Pet } from "./pixel";
-import productGif from "@/assets/focusframe.gif.asset.json";
 
-/** Real product recording of the FocusFrame new-tab dashboard. */
+/**
+ * Hero product preview — embeds the actual FocusFrame extension as a live
+ * iframe so the hero shows the real dashboard, not a recording.
+ */
 export function ProductGif() {
   return (
-    <img
-      src={productGif.url}
-      alt="FocusFrame new-tab dashboard in action"
-      width={1280}
-      height={720}
-      className="block w-full"
-      loading="lazy"
-    />
+    <div className="relative w-full overflow-hidden bg-background">
+      <iframe
+        src="/focusframe-demo/newtab.html"
+        title="FocusFrame new-tab dashboard"
+        className="block w-full"
+        style={{ height: "480px", border: "none", pointerEvents: "none" }}
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin"
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+    </div>
   );
 }
 

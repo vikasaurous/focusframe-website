@@ -10,7 +10,7 @@ export interface CatAnimationDeps {
   debugHUD: HTMLDivElement;
   lastStateRef: { current: CatActivityState };
   onStateChangeRef: { current: ((state: CatActivityState) => void) | undefined };
-  liveStateRef?: { current: CatLiveState };
+  liveStateRef?: { current: CatLiveState } | undefined;
   /** Seasonal hat drawn on the cat, repositioned with every sprite frame. */
-  hat?: HTMLDivElement;
+  hat?: HTMLDivElement | undefined;
 }

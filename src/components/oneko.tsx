@@ -199,7 +199,7 @@ function RestingCat({
   zIndex,
 }: {
   source: string;
-  position?: { x: number; y: number };
+  position?: { x: number; y: number } | undefined;
   scale: number;
   opacity: number;
   hueRotate: number;

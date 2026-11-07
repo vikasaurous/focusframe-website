@@ -13,14 +13,15 @@ import {
 import { SEASON_MESSAGES } from "../seasons";
 import type { CatAnimationDeps } from "./deps";
 
-export function pickFromPool(deps: CatAnimationDeps, pool: readonly string[]) {
+export function pickFromPool(deps: CatAnimationDeps, pool: readonly string[]): string {
+  if (pool.length === 0) return "";
   const s = deps.stateRef.current;
   let idx = Math.floor(Math.random() * pool.length);
   if (idx === s.lastBubbleMsg) {
     idx = (idx + 1) % pool.length;
   }
   s.lastBubbleMsg = idx;
-  return pool[idx];
+  return pool[idx] ?? "";
 }
 
 function messageForIdleAnimation(deps: CatAnimationDeps): string | undefined {

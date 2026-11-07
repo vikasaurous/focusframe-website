@@ -51,7 +51,7 @@ export function defaultPlayState(): PlayStateFields {
 }
 
 export type InitialCatStateOptions = CatRuntimeConfig & {
-  initialPos?: { x: number; y: number };
+  initialPos?: { x: number; y: number } | undefined;
 };
 
 export function createInitialCatState(options: InitialCatStateOptions): CatRuntimeState {
