@@ -44,7 +44,7 @@
   // ---- Tunables ------------------------------------------------------------
 
   var CONFIG = {
-    benchX: 6, // left edge of the bench
+    benchX: 15, // left edge of the bench
     petMinX: 62, // pet never walks left of this (stays clear of the flower)
     petMaxSpan: 150, // pet never walks further than this from petMinX
     petRightMargin: 4,
@@ -89,9 +89,7 @@
   function isSafeLink(url) {
     try {
       var u = new URL(url);
-      return (
-        u.protocol === "https:" && !u.username && !u.password && !!u.hostname
-      );
+      return u.protocol === "https:" && !u.username && !u.password && !!u.hostname;
     } catch (e) {
       return false;
     }
@@ -116,8 +114,7 @@
     if (!night) {
       t = (h - CONFIG.sunrise) / (CONFIG.sunset - CONFIG.sunrise);
     } else {
-      var since =
-        h >= CONFIG.sunset ? h - CONFIG.sunset : h + (24 - CONFIG.sunset);
+      var since = h >= CONFIG.sunset ? h - CONFIG.sunset : h + (24 - CONFIG.sunset);
       t = since / (24 - (CONFIG.sunset - CONFIG.sunrise));
     }
     t = clamp(t, 0, 1);
@@ -134,11 +131,7 @@
       glow: sz.glow,
       progress: t,
       x: Math.round(x0 + (x1 - x0) * t),
-      y: Math.round(
-        CONFIG.skyHorizonY +
-          dy -
-          (CONFIG.skyHorizonY + dy - CONFIG.skyTopY) * arc,
-      ),
+      y: Math.round(CONFIG.skyHorizonY + dy - (CONFIG.skyHorizonY + dy - CONFIG.skyTopY) * arc),
     };
   }
 
@@ -155,8 +148,7 @@
       var y = Math.round(between(rnd, 2, 26 + dy));
       var ok = true;
       for (var i = 0; i < out.length; i++) {
-        if (Math.abs(out[i].x - x) < 9 && Math.abs(out[i].y - y) < 7)
-          ok = false;
+        if (Math.abs(out[i].x - x) < 9 && Math.abs(out[i].y - y) < 7) ok = false;
       }
       if (ok)
         out.push({
@@ -174,10 +166,7 @@
   function petRange(kind, width) {
     var w = SP.PETS[kind].w;
     var min = CONFIG.petMinX;
-    var max = Math.min(
-      width - w - CONFIG.petRightMargin,
-      min + CONFIG.petMaxSpan,
-    );
+    var max = Math.min(width - w - CONFIG.petRightMargin, min + CONFIG.petMaxSpan);
     if (max < min) max = min;
     return { min: min, max: max };
   }
@@ -291,8 +280,7 @@
    */
   function createScene(opts) {
     var o = opts || {};
-    var rnd =
-      o.rnd || (o.seed != null ? mulberry32(o.seed >>> 0) : Math.random);
+    var rnd = o.rnd || (o.seed != null ? mulberry32(o.seed >>> 0) : Math.random);
     var width = Math.max(120, Math.floor(o.width || 180));
     var height = Math.max(SP.SCENE_H, Math.floor(o.height || SP.SCENE_H));
     var kind = SP.PETS[o.pet] ? o.pet : "cat";
@@ -336,9 +324,7 @@
         var next = target === "boy" || target === "pet" ? target : null;
         if (next === hover) return;
         hover = next;
-        bubble = next
-          ? { target: next, text: pickMessage(next), href: linkFor(next) }
-          : null;
+        bubble = next ? { target: next, text: pickMessage(next), href: linkFor(next) } : null;
       },
 
       setPet: function (name) {
@@ -347,11 +333,7 @@
         var dir = pet.dir;
         pet = newPet(name, width, rnd);
         pet.dir = dir;
-        pet.x = clamp(
-          oldX,
-          petRange(name, width).min,
-          petRange(name, width).max,
-        );
+        pet.x = clamp(oldX, petRange(name, width).min, petRange(name, width).max);
       },
 
       setWidth: function (w) {
@@ -381,9 +363,7 @@
         var head = headBase + (boy.blinkLeft > 0 ? "Blink" : "");
         var typing = !looking && !reduced;
         var arms =
-          typing && Math.floor(boy.anim / CONFIG.typingFrame) % 2 === 1
-            ? "armsB"
-            : "armsA";
+          typing && Math.floor(boy.anim / CONFIG.typingFrame) % 2 === 1 ? "armsB" : "armsA";
 
         var def = SP.PETS[pet.kind];
         var moving = pet.mode === "walk" && pet.resume <= 0 && !reduced;
@@ -403,24 +383,14 @@
         var sky = celestial(date, width, height);
         if (sky.kind === "sun")
           sky.sprite =
-            SP.SUN_FRAMES[
-              reduced
-                ? 0
-                : Math.floor(time / CONFIG.sunFrame) % SP.SUN_FRAMES.length
-            ];
+            SP.SUN_FRAMES[reduced ? 0 : Math.floor(time / CONFIG.sunFrame) % SP.SUN_FRAMES.length];
         var starList = [];
         if (night) {
           for (var i = 0; i < stars.length; i++) {
             var s = stars[i];
             // keep stars off the moon
-            if (
-              Math.abs(s.x - (sky.x + 6)) < 10 &&
-              Math.abs(s.y - (sky.y + 6)) < 10
-            )
-              continue;
-            var bright = reduced
-              ? true
-              : Math.sin(time * 1.3 + s.phase) > -0.35;
+            if (Math.abs(s.x - (sky.x + 6)) < 10 && Math.abs(s.y - (sky.y + 6)) < 10) continue;
+            var bright = reduced ? true : Math.sin(time * 1.3 + s.phase) > -0.35;
             starList.push({
               x: s.x,
               y: s.y,
@@ -451,10 +421,7 @@
           flower: {
             x: bx + SP.FLOWER.dx,
             y: SP.FLOWER.y + dy,
-            sprite:
-              SP.FLOWER.frames[
-                reduced ? 0 : Math.floor(time / CONFIG.flowerFrame) % 2
-              ],
+            sprite: SP.FLOWER.frames[reduced ? 0 : Math.floor(time / CONFIG.flowerFrame) % 2],
           },
           pet: {
             kind: pet.kind,
@@ -481,10 +448,7 @@
                 text: bubble.text,
                 href: bubble.href,
                 // x/y the bubble tail points at (top-center of the thing hovered)
-                anchorX:
-                  bubble.target === "boy"
-                    ? bx + SP.BOY.bodyDX + 10
-                    : petX + def.w / 2,
+                anchorX: bubble.target === "boy" ? bx + SP.BOY.bodyDX + 10 : petX + def.w / 2,
                 anchorY: bubble.target === "boy" ? 9 + dy : petY - 2,
               }
             : null,
