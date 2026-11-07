@@ -14,6 +14,10 @@ import { SEASON_MESSAGES } from "../seasons";
 import type { CatAnimationDeps } from "./deps";
 
 export function pickFromPool(deps: CatAnimationDeps, pool: readonly string[]): string {
+<<<<<<< HEAD
+  if (pool.length === 0) return "";
+=======
+>>>>>>> origin/main
   const s = deps.stateRef.current;
   let idx = Math.floor(Math.random() * pool.length);
   if (idx === s.lastBubbleMsg) {

@@ -80,14 +80,27 @@
   --px-tree: oklch(0.35 0.07 150);
 }
 
-.accent-coral { --live: var(--primary); }
-.accent-cobalt { --live: var(--cobalt); }
-.accent-moss { --live: var(--moss); }
-.accent-plum { --live: var(--plum); }
+.accent-coral {
+  --live: var(--primary);
+}
+.accent-cobalt {
+  --live: var(--cobalt);
+}
+.accent-moss {
+  --live: var(--moss);
+}
+.accent-plum {
+  --live: var(--plum);
+}
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -95,8 +108,13 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
-  :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
-  ::selection { background: color-mix(in oklab, var(--primary) 40%, transparent); }
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 40%, transparent);
+  }
 }
 
 @utility eyebrow {
@@ -115,24 +133,59 @@
 }
 
 @utility btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  min-height: 2.75rem; padding: 0 1.25rem; border-radius: var(--radius);
-  background: var(--primary); color: var(--primary-foreground);
-  font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em;
-  box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary) 60%, black), 0 10px 30px -12px color-mix(in oklab, var(--primary) 70%, transparent);
-  transition: transform 150ms, filter 150ms;
-  &:hover { filter: brightness(1.08); transform: translateY(-1px); }
-  &:active { transform: translateY(1px); }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--primary) 60%, black),
+    0 10px 30px -12px color-mix(in oklab, var(--primary) 70%, transparent);
+  transition:
+    transform 150ms,
+    filter 150ms;
+  &:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
 }
 
 @utility btn-ghost {
-  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-  min-height: 2.75rem; padding: 0 1.25rem; border-radius: var(--radius);
-  border: 1px solid var(--border); color: var(--foreground);
-  font-family: var(--font-mono); font-size: 0.8rem;
-  transition: background 150ms, border-color 150ms;
-  &:hover { background: var(--card); border-color: var(--subtle); }
-  &:disabled, &[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; background: transparent; }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  transition:
+    background 150ms,
+    border-color 150ms;
+  &:hover {
+    background: var(--card);
+    border-color: var(--subtle);
+  }
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: transparent;
+  }
 }
 
 @utility panel {
@@ -142,54 +195,223 @@
 }
 
 @utility kbd {
-  display: inline-flex; align-items: center; min-width: 1.6rem; justify-content: center;
-  padding: 0.15rem 0.45rem; border: 1px solid var(--border); border-bottom-width: 2px;
-  border-radius: 4px; background: var(--card); font-family: var(--font-mono); font-size: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  min-width: 1.6rem;
+  justify-content: center;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--card);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   color: var(--foreground);
 }
 
 @utility dot-grid {
-  background-image: radial-gradient(color-mix(in oklab, var(--foreground) 9%, transparent) 1px, transparent 1px);
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--foreground) 9%, transparent) 1px,
+    transparent 1px
+  );
   background-size: 18px 18px;
 }
 
 @utility glow-frame {
-  box-shadow: 0 0 0 1px var(--border), 0 40px 120px -40px color-mix(in oklab, var(--primary) 45%, transparent), 0 30px 60px -30px oklch(0 0 0 / 0.8);
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 40px 120px -40px color-mix(in oklab, var(--primary) 45%, transparent),
+    0 30px 60px -30px oklch(0 0 0 / 0.8);
 }
 
 @utility reveal {
-  opacity: 0; transform: translateY(18px);
-  transition: opacity 700ms ease, transform 700ms ease;
-  &.is-visible { opacity: 1; transform: none; }
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+  &.is-visible {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes pet-walk {
-  0% { transform: translateX(0) scaleX(1); }
-  48% { transform: translateX(46px) scaleX(1); }
-  50% { transform: translateX(46px) scaleX(-1); }
-  98% { transform: translateX(0) scaleX(-1); }
-  100% { transform: translateX(0) scaleX(1); }
+  0% {
+    transform: translateX(0) scaleX(1);
+  }
+  48% {
+    transform: translateX(46px) scaleX(1);
+  }
+  50% {
+    transform: translateX(46px) scaleX(-1);
+  }
+  98% {
+    transform: translateX(0) scaleX(-1);
+  }
+  100% {
+    transform: translateX(0) scaleX(1);
+  }
 }
-@keyframes ray { 0%,100% { opacity: 0.25; } 50% { opacity: 1; } }
-@keyframes twinkle { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
-@keyframes rise { from { opacity: 0; transform: translateY(24px) scale(0.985); } to { opacity: 1; transform: none; } }
-@keyframes blink { 50% { opacity: 0; } }
-@keyframes typing { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes ray {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes typing {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
 
-@utility anim-pet { transform-box: fill-box; transform-origin: center; animation: pet-walk 9s steps(46) infinite; }
-@utility anim-ray { animation: ray 2.4s steps(3) infinite; }
-@utility anim-twinkle { animation: twinkle 3s steps(3) infinite; }
-@utility anim-rise { animation: rise 900ms cubic-bezier(.2,.7,.2,1) both; }
-@utility anim-blink { animation: blink 1s steps(1) infinite; }
-@utility anim-typing { animation: typing 1.2s steps(2) infinite; }
+@utility anim-pet {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pet-walk 9s steps(46) infinite;
+}
+@utility anim-ray {
+  animation: ray 2.4s steps(3) infinite;
+}
+@utility anim-twinkle {
+  animation: twinkle 3s steps(3) infinite;
+}
+@utility anim-rise {
+  animation: rise 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@utility anim-blink {
+  animation: blink 1s steps(1) infinite;
+}
+@utility anim-typing {
+  animation: typing 1.2s steps(2) infinite;
+}
 
-.pet-hover:hover .pet-body { transform: translateY(-3px); }
-.pet-body { transition: transform 120ms steps(2); }
+.pet-hover:hover .pet-body {
+  transform: translateY(-3px);
+}
+.pet-body {
+  transition: transform 120ms steps(2);
+}
 
-.scene-paused * { animation-play-state: paused !important; }
+.scene-paused * {
+  animation-play-state: paused !important;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .reveal { opacity: 1; transform: none; }
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    background-position: 0 -100%;
+  }
+  100% {
+    background-position: 0 200%;
+  }
+}
+
+/* FinalCta: exactly one screen tall; content scales to fit */
+.cta-screen {
+  box-sizing: border-box;
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  /* label sits at the top like other sections; .cta-stack centers in the rest */
+  /* sticky header is 4rem tall; keep content clear of it */
+  padding-top: calc(4rem + clamp(0.25rem, 1.5svh, 1.5rem));
+  padding-bottom: clamp(0.75rem, 3svh, 2rem);
+}
+.cta-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.6rem, 2.4svh, 1.9rem);
+  width: 100%;
+  max-width: 56rem;
+  min-height: 0;
+  margin: auto;
+  padding-inline: 1.25rem;
+  text-align: center;
+}
+.cta-title {
+  font-size: clamp(2.4rem, calc(min(11.8vw, 9.6svh) + 1px), 6.4rem);
+}
+.cta-copy {
+  max-width: 29rem;
+  font-size: clamp(0.92rem, 2.3svh, 1.18rem);
+  line-height: 1.5;
+}
+/* buttons ~7% larger, scoped to the CTA only */
+.cta-stack .btn-primary,
+.cta-stack .btn-ghost {
+  min-height: 2.95rem;
+  padding-inline: 1.35rem;
+}
+/* mascot ~11% larger than before (92 / 138 / 184 / 69). 46 art cols, so scale is no longer whole-number */
+.cta-mascot {
+  width: 102px;
+}
+@media (min-height: 560px) {
+  .cta-mascot {
+    width: 154px;
+  }
+}
+@media (min-height: 760px) and (min-width: 640px) {
+  .cta-mascot {
+    width: 204px;
+  }
+}
+@media (max-height: 480px) {
+  .cta-mascot {
+    width: 77px;
+  }
 }
