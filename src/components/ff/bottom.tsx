@@ -23,7 +23,7 @@ export function Privacy() {
     "Only the storage permission declared in its manifest",
   ];
   const notes = [
-    "The extension loads its fonts from Google Fonts.",
+    "The extension loads locally bundled WOFF2 fonts from fonts/ with no requests to Google Fonts.",
     "Searches and command-bar prompts go directly to the service you choose, when you submit them.",
     "Those services have their own privacy policies.",
     "FocusFrame runs no AI processing of its own.",
@@ -156,58 +156,52 @@ export function Browsers() {
   );
 }
 
+function renderFaqAnswer(text: string) {
+  const parts = text.split(/(`[^`]+`)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        <code
+          key={index}
+          className="rounded border border-border bg-card px-1.5 py-0.5 font-mono text-xs text-foreground"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
+}
+
 const FAQS: [string, string][] = [
   [
     "What is FocusFrame?",
-    "A browser extension that turns your empty new-tab page into a personal productivity space — daily focus, three tasks, habits, links, a note, quotes, countdowns, a command launcher, a year-progress tracker and a small pixel-art scene.",
+    "FocusFrame replaces your browser's new-tab page with a personal dashboard. It includes Daily Focus, Top 3 Tasks, Habits and Quick Links by default, with optional notes, quotes and countdowns. It also features web search, a Command Bar, year progress and a pixel-art scene.",
   ],
   [
-    "How does FocusFrame work?",
-    "Once installed, it replaces your browser's new-tab page. Every time you open a tab, your dashboard is there.",
+    "Can I customize my dashboard?",
+    "Yes. Enable or disable any of the seven modules, rearrange cards using drag and drop, and place up to three cards per row. You can also change accent colours, choose your companion and customize scene settings.",
   ],
-  [
-    "Which browsers support FocusFrame?",
-    "Firefox, today. Chrome and Edge versions have been submitted and are not available yet.",
-  ],
-  ["Does FocusFrame require an account?", "No. There is no sign-up and no login."],
   [
     "Where is my data stored?",
-    "In your browser's local extension storage, on your device. FocusFrame has no backend of its own.",
+    "Your settings and dashboard data are stored locally in your browser using `chrome.storage.local`. FocusFrame has no cloud synchronization, so your data does not automatically sync between devices.",
   ],
   [
-    "Does FocusFrame collect analytics?",
-    "No. FocusFrame includes no analytics. Note that the extension loads its fonts from Google Fonts, and searches you submit go to the service you picked.",
+    "Does FocusFrame collect analytics or send my data anywhere?",
+    "FocusFrame has no account system, backend or analytics. Your dashboard data stays in local browser storage. When you use search or a Command Bar destination, your browser opens the external service you selected. That service handles your query under its own privacy policy. FocusFrame does not log your searches.",
   ],
   [
-    "Can I customize dashboard modules?",
-    "Yes. Switch any of the seven modules on or off and rearrange cards by dragging them — up to three per row.",
+    "What permissions does FocusFrame require?",
+    "FocusFrame requires only the `storage` permission, used to save your dashboard settings and content locally.",
   ],
   [
-    "Can I disable the pixel-art scene?",
-    "Yes. You can turn the scene off entirely, or just turn off its animations. Reduced-motion preferences are respected.",
+    "How does the Command Bar work?",
+    "Press `Alt + K` to open the Command Bar. Search or use slash commands to open one of 16 built-in destinations, including GitHub, Reddit and AI services. FocusFrame has no AI model of its own. Gemini uses clipboard-based prompt transfer, so you must paste your query manually.",
   ],
   [
-    "What is the Command Bar?",
-    "A keyboard launcher (Alt + K by default) for sending a query to sites like Wikipedia, Reddit, GitHub or YouTube, or to AI services — with slash commands such as /wiki, /r and /gh.",
+    "What happens to unfinished tasks?",
+    "Unfinished tasks carry over to the next day. Completed tasks are cleared when the day changes.",
   ],
-  [
-    "Does FocusFrame contain its own AI model?",
-    "No. It simply opens the external AI service you choose. All answers come from that service.",
-  ],
-  [
-    "Can I use my favourite AI tools through FocusFrame?",
-    "You can open ChatGPT, Claude, Gemini, Perplexity and Grok from the command bar. Gemini receives your prompt through the clipboard rather than a prefilled link.",
-  ],
-  [
-    "Can I synchronize data across different devices?",
-    "Not currently. Synchronization isn't implemented — your data lives in the browser where you use FocusFrame.",
-  ],
-  [
-    "What happens to unfinished daily tasks?",
-    "They carry over to the next day. Completed tasks clear overnight.",
-  ],
-  ["How many habits can I track?", "Up to five, tracked Monday to Sunday with streaks."],
-  ["Can I change my companion animal?", "Yes — choose a cat, a dog or a dinosaur."],
 ];
 
 export function Faq() {
@@ -250,7 +244,7 @@ export function Faq() {
                   hidden={!isOpen}
                   className="pb-6 pl-10 text-muted-foreground"
                 >
-                  {a}
+                  {renderFaqAnswer(a)}
                 </dd>
               </div>
             );
