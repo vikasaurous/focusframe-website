@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { SectionHead, Reveal } from "./shared";
+import { useAccent } from "@/lib/theme";
 
 /**
  * LiveDemo — embeds the actual FocusFrame extension interface as an interactive
@@ -12,6 +13,16 @@ import { SectionHead, Reveal } from "./shared";
 export function LiveDemo() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loaded, setLoaded] = useState(false);
+  const { accent } = useAccent();
+
+  /* Keep demo iframe in sync with global theme accent */
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe?.contentWindow) return;
+    try {
+      iframe.contentWindow.postMessage({ type: "SET_ACCENT", accent }, "*");
+    } catch {}
+  }, [accent]);
 
   /* Autoplay the WebP in the preview while iframe loads */
   useEffect(() => {
@@ -67,7 +78,7 @@ export function LiveDemo() {
 
           <iframe
             ref={iframeRef}
-            src="/focusframe-demo/newtab.html"
+            src={`/focusframe-demo/newtab.html?accent=${accent}`}
             title="FocusFrame interactive demo — try the actual extension"
             className="block w-full"
             style={{ height: "820px", border: "none" }}

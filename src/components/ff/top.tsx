@@ -3,6 +3,7 @@ import { Github, Menu, X } from "lucide-react";
 import { GITHUB_URL, NAV_LINKS } from "@/config/site";
 import { BrandMark, FirefoxButton, Reveal, SectionHead, WindowFrame } from "./shared";
 import { ProductGif } from "./mockups";
+import { useAccent } from "@/lib/theme";
 // import { PixelScene } from "./pixel";
 
 export function Nav() {
@@ -158,6 +159,7 @@ const PREVIEW_TABS = [
 ] as const;
 
 export function Preview() {
+  const { accent } = useAccent();
   const [tab, setTab] = useState<(typeof PREVIEW_TABS)[number]["id"]>("dashboard");
   const current = PREVIEW_TABS.find((t) => t.id === tab)!;
   return (
@@ -207,7 +209,7 @@ export function Preview() {
 
                 {tab === "scene" && (
                   <iframe
-                    src="/focusframe-demo/scene-preview.html"
+                    src={`/focusframe-demo/scene-preview.html?accent=${accent}`}
                     title="FocusFrame Pixel Scene Preview"
                     className="block w-full border-0"
                     style={{ height: "480px" }}

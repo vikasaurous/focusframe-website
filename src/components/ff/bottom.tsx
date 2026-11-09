@@ -32,7 +32,7 @@ export function Privacy() {
     <section id="privacy" className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-5">
-          <SectionHead index="09" label="Privacy" title="Your space belongs to you.">
+          <SectionHead index="08" label="Privacy" title="Your space belongs to you.">
             A personal workspace should stay personal.
           </SectionHead>
         </div>
@@ -83,7 +83,7 @@ export function HowItWorks() {
     <section id="how-it-works" className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <SectionHead
-          index="10"
+          index="09"
           label="How it works"
           title="Three steps. A better starting point."
         />
@@ -119,7 +119,7 @@ export function Browsers() {
   return (
     <section id="download" className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionHead index="11" label="Availability" title="Ready for your next new tab?" />
+        <SectionHead index="10" label="Availability" title="Ready for your next new tab?" />
         <div className="mt-14 grid gap-4 md:grid-cols-3">
           {items.map((b) => (
             <Reveal
@@ -210,7 +210,7 @@ export function Faq() {
     <section id="faq" className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-4">
-          <SectionHead index="12" label="FAQ" title="Questions, answered." />
+          <SectionHead index="11" label="FAQ" title="Questions, answered." />
         </div>
         <dl className="divide-y divide-border border-y border-border lg:col-span-8">
           {FAQS.map(([q, a], i) => {
@@ -268,7 +268,7 @@ export function FinalCta() {
       <div className="relative mx-auto w-full max-w-7xl px-5 lg:px-8">
         <Reveal className="max-w-3xl">
           <p className="eyebrow flex items-center gap-3">
-            <span className="text-primary">13</span>
+            <span className="text-primary">12</span>
             <span className="h-px w-8 bg-border" />
             Start
           </p>

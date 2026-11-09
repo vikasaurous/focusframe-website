@@ -26,6 +26,10 @@ html {
   min-width: 320px;
   background: var(--ground);
 }
+html.is-preview,
+html.is-preview body {
+  overflow: hidden;
+}
 body {
   min-height: 100vh;
   margin: 0;

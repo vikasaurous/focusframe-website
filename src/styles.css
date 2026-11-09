@@ -33,6 +33,7 @@
   --color-border: var(--border);
   --color-input: var(--border);
   --color-ring: var(--primary);
+  --color-coral: var(--coral);
   --color-cobalt: var(--cobalt);
   --color-moss: var(--moss);
   --color-plum: var(--plum);
@@ -48,11 +49,16 @@
   --muted-foreground: oklch(0.72 0.004 285);
   --subtle: oklch(0.64 0.006 260);
   --border: oklch(0.3 0.008 250);
-  --primary: oklch(0.68 0.17 30);
-  --primary-foreground: oklch(0.155 0.003 230);
+
+  /* Accent palette */
+  --coral: oklch(0.68 0.17 30);
   --cobalt: oklch(0.77 0.11 260);
   --moss: oklch(0.84 0.1 130);
   --plum: oklch(0.82 0.09 330);
+
+  /* Active brand accent (default: coral) */
+  --primary: var(--coral);
+  --primary-foreground: oklch(0.155 0.003 230);
   --live: var(--primary);
 
   /* pixel-art palette */
@@ -80,17 +86,31 @@
   --px-tree: oklch(0.35 0.07 150);
 }
 
+:root[data-accent="coral"],
 .accent-coral {
+  --primary: var(--coral);
   --live: var(--primary);
 }
-.accent-cobalt {
-  --live: var(--cobalt);
+:root[data-accent="cobalt"],
+:root[data-accent="blue"],
+.accent-cobalt,
+.accent-blue {
+  --primary: var(--cobalt);
+  --live: var(--primary);
 }
-.accent-moss {
-  --live: var(--moss);
+:root[data-accent="moss"],
+:root[data-accent="green"],
+.accent-moss,
+.accent-green {
+  --primary: var(--moss);
+  --live: var(--primary);
 }
-.accent-plum {
-  --live: var(--plum);
+:root[data-accent="plum"],
+:root[data-accent="purple"],
+.accent-plum,
+.accent-purple {
+  --primary: var(--plum);
+  --live: var(--primary);
 }
 
 @layer base {

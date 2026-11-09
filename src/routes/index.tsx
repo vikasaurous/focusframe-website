@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Hero, Nav, Preview, Statement } from "@/components/ff/top";
 import { LayoutSection, Modules } from "@/components/ff/modules";
 import { CommandSection } from "@/components/ff/command";
-import { Personalize, PixelWorld, YearDots } from "@/components/ff/world";
+import { Personalize, YearDots } from "@/components/ff/world";
 import { Browsers, Faq, FinalCta, Footer, HowItWorks, Privacy } from "@/components/ff/bottom";
 import { LiveDemo } from "@/components/ff/demo";
 import { PRODUCT } from "@/config/site";
@@ -38,7 +38,6 @@ function Index() {
         <Modules />
         <LayoutSection />
         <CommandSection />
-        <PixelWorld />
         <YearDots />
         <Personalize />
         <Privacy />

@@ -123,6 +123,14 @@
     var currentPet = "cat";
     var sceneCtl = null;
 
+    try {
+      var urlParams = new URLSearchParams(window.location.search);
+      var qPet = urlParams.get("pet");
+      if (qPet) currentPet = qPet === "dinosaur" ? "dino" : qPet;
+      var qAccent = urlParams.get("accent");
+      if (qAccent) document.documentElement.dataset.accent = qAccent;
+    } catch(e) {}
+
     function updateClock() {
       var now = new Date();
       var h = now.getHours();
@@ -142,6 +150,21 @@
       // Init new scene
       sceneCtl = window.FFScene.init(container, { pet: pet, enabled: true });
     }
+
+    window.addEventListener("message", function(event) {
+      if (!event.data) return;
+      if (event.data.type === "SET_PET" && event.data.pet) {
+        var p = event.data.pet === "dinosaur" ? "dino" : event.data.pet;
+        currentPet = p;
+        document.querySelectorAll(".pet-btn").forEach(function(b) {
+          b.classList.toggle("active", b.dataset.pet === p);
+        });
+        startScene(p);
+      }
+      if (event.data.type === "SET_ACCENT" && event.data.accent) {
+        document.documentElement.dataset.accent = event.data.accent;
+      }
+    });
 
     // Pet buttons
     document.querySelectorAll(".pet-btn").forEach(function(btn) {

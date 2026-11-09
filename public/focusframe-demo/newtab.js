@@ -1,4 +1,4 @@
-﻿/* ================================================================
+/* ================================================================
  * FocusFrame — DEMO MODE SHIM
  * Runs when the extension is embedded as a website demo.
  * - Forces localStorage (never chrome.storage)
@@ -379,6 +379,25 @@ async function load() {
     ...(savedData.scene || {}),
   };
   if (!SCENE_PETS.includes(state.scene.pet)) state.scene.pet = "cat";
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const qAccent = urlParams.get("accent");
+    const qPet = urlParams.get("pet");
+    if (qAccent) {
+      const normalizedAccent =
+        qAccent === "blue" ? "cobalt" : qAccent === "green" ? "moss" : qAccent === "purple" ? "plum" : qAccent;
+      state.accent = normalizedAccent;
+    }
+    if (qPet) {
+      const normalizedPet = qPet === "dinosaur" ? "dino" : qPet;
+      if (SCENE_PETS.includes(normalizedPet)) {
+        state.scene.pet = normalizedPet;
+      }
+    }
+    if (urlParams.get("preview") === "true" || urlParams.get("preview") === "1") {
+      document.documentElement.classList.add("is-preview");
+    }
+  } catch {}
   // Command bar settings with safe defaults.
   state.commandBar = FFCommands.mergeSettings(savedData.commandBar);
   document.documentElement.dataset.accent = state.accent;
@@ -397,6 +416,40 @@ async function load() {
   updateTeaser();
   initScene();
   ready = true;
+}
+
+function setDemoAccent(newAccent) {
+  if (!newAccent) return;
+  const normalized =
+    newAccent === "blue" ? "cobalt" : newAccent === "green" ? "moss" : newAccent === "purple" ? "plum" : newAccent;
+  state.accent = normalized;
+  document.documentElement.dataset.accent = normalized;
+  document.querySelectorAll(".swatch").forEach((b) => {
+    b.classList.toggle("is-selected", b.dataset.accent === normalized);
+  });
+}
+
+function setDemoPet(newPet) {
+  if (!newPet) return;
+  const normalized = newPet === "dinosaur" ? "dino" : newPet;
+  if (!SCENE_PETS.includes(normalized)) return;
+  state.scene = state.scene || {};
+  state.scene.pet = normalized;
+  if (sceneCtl) sceneCtl.setPet(normalized);
+  document.querySelectorAll('[name="scene-pet"]').forEach((r) => {
+    r.checked = r.value === normalized;
+  });
+}
+
+window.addEventListener("message", (event) => {
+  if (!event.data) return;
+  if (event.data.type === "SET_ACCENT") setDemoAccent(event.data.accent);
+  if (event.data.type === "SET_PET") setDemoPet(event.data.pet);
+});
+
+if (window.FocusFrameDemo) {
+  window.FocusFrameDemo.setAccent = setDemoAccent;
+  window.FocusFrameDemo.setPet = setDemoPet;
 }
 
 // Pixel scene under the greeting.
@@ -1171,6 +1224,9 @@ $(".swatches").addEventListener("click", (event) => {
   state.accent = button.dataset.accent;
   save("Accent updated");
   render();
+  try {
+    window.parent?.postMessage({ type: "FOCUSFRAME_ACCENT_CHANGED", accent: state.accent }, "*");
+  } catch {}
 });
 $("#link-form").addEventListener("submit", (event) => {
   event.preventDefault();

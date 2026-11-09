@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Moon, Sun, RotateCcw } from "lucide-react";
-import { PixelScene, type Pet } from "./pixel";
+import { RotateCcw } from "lucide-react";
+import type { Pet } from "./pixel";
 import { Reveal, SectionHead, WindowFrame } from "./shared";
-import { DashboardMock } from "./mockups";
+import { ProductGif } from "./mockups";
+import { ACCENTS, useAccent } from "@/lib/theme";
 import {
   COLS,
   ROWS,
@@ -16,90 +17,6 @@ import {
 
 const PETS: Pet[] = ["cat", "dog", "dinosaur"];
 
-export function PixelWorld() {
-  const [night, setNight] = useState(false);
-  const [pet, setPet] = useState<Pet>("cat");
-  const [animate, setAnimate] = useState(true);
-  return (
-    <section className="border-t border-border py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionHead
-          index="06"
-          label="Pixel-art world"
-          title="A little world inside every new tab."
-        >
-          Your workspace doesn't need to feel lifeless.
-        </SectionHead>
-        <Reveal className="mt-14 grid gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <div className="overflow-hidden rounded-lg glow-frame">
-              <PixelScene night={night} pet={pet} animate={animate} />
-            </div>
-            <p className="mt-3 font-mono text-[10px] text-subtle">
-              Website illustration in the FocusFrame style — hover the {pet}. The extension runs its
-              own live scene engine.
-            </p>
-          </div>
-          <div className="space-y-6 lg:col-span-4">
-            <Control label="Sky">
-              <div className="grid grid-cols-2 gap-2">
-                <Toggle on={!night} onClick={() => setNight(false)}>
-                  <Sun className="size-3.5" />
-                  Day
-                </Toggle>
-                <Toggle on={night} onClick={() => setNight(true)}>
-                  <Moon className="size-3.5" />
-                  Night
-                </Toggle>
-              </div>
-            </Control>
-            <Control label="Companion">
-              <div className="grid grid-cols-3 gap-2">
-                {PETS.map((p) => (
-                  <Toggle key={p} on={pet === p} onClick={() => setPet(p)}>
-                    {p === "dinosaur" ? "Dino" : p.charAt(0).toUpperCase() + p.slice(1)}
-                  </Toggle>
-                ))}
-              </div>
-            </Control>
-            <Control label="Animations">
-              <div className="grid grid-cols-2 gap-2">
-                <Toggle on={animate} onClick={() => setAnimate(true)}>
-                  On
-                </Toggle>
-                <Toggle on={!animate} onClick={() => setAnimate(false)}>
-                  Off
-                </Toggle>
-              </div>
-            </Control>
-            <ul className="space-y-1.5 border-t border-border pt-5 font-mono text-[11px] text-muted-foreground">
-              {[
-                "Person coding on a bench",
-                "Sun, moon, stars & sun rays",
-                "Walking pet with hover reactions",
-                "Scene can be turned off",
-                "Respects reduced-motion settings",
-              ].map((f) => (
-                <li key={f} className="before:mr-1.5 before:text-primary before:content-['▪']">
-                  {f}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function Control({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <p className="eyebrow mb-2">{label}</p>
-      {children}
-    </div>
-  );
-}
 function Toggle({
   on,
   onClick,
@@ -113,7 +30,7 @@ function Toggle({
     <button
       onClick={onClick}
       aria-pressed={on}
-      className={`flex min-h-11 items-center justify-center gap-1.5 rounded border font-mono text-xs transition-colors ${on ? "border-live bg-live/10 text-live" : "border-border text-muted-foreground hover:text-foreground"}`}
+      className={`flex min-h-11 items-center justify-center gap-1.5 rounded border font-mono text-xs transition-colors ${on ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
     >
       {children}
     </button>
@@ -158,7 +75,7 @@ export function YearDots() {
     <section className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-4">
-          <SectionHead index="07" label="Year in dots" title="See your year taking shape.">
+          <SectionHead index="06" label="Year in dots" title="See your year taking shape.">
             Every dot is a day. A little snake roams the days behind you, eating them one by one.
           </SectionHead>
           <Reveal className="mt-10 grid grid-cols-2 gap-6 border-t border-border pt-6">
@@ -298,15 +215,8 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-const ACCENTS = [
-  { id: "coral", label: "Coral", cls: "bg-primary" },
-  { id: "cobalt", label: "Cobalt", cls: "bg-cobalt" },
-  { id: "moss", label: "Moss", cls: "bg-moss" },
-  { id: "plum", label: "Plum", cls: "bg-plum" },
-] as const;
-
 export function Personalize() {
-  const [accent, setAccent] = useState<(typeof ACCENTS)[number]["id"]>("coral");
+  const { accent, setAccent } = useAccent();
   const [pet, setPet] = useState<Pet>("cat");
   const opts = [
     "Toggle dashboard modules",
@@ -318,16 +228,18 @@ export function Personalize() {
     "Command bar settings",
     "Year animation settings",
   ];
+  const activeAccent = ACCENTS.find((a) => a.id === accent) ?? ACCENTS[0]!;
+
   return (
-    <section className={`accent-${accent} border-t border-border py-24 lg:py-32`}>
+    <section className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-5">
           <SectionHead
-            index="08"
+            index="07"
             label="Personalization"
             title={
               <>
-                Make it feel like <em className="text-live transition-colors">yours.</em>
+                Make it feel like <em className="text-primary transition-colors">yours.</em>
               </>
             }
           />
@@ -342,7 +254,9 @@ export function Personalize() {
                     aria-checked={accent === a.id}
                     aria-label={a.label}
                     onClick={() => setAccent(a.id)}
-                    className={`size-11 rounded-full ${a.cls} ring-offset-4 ring-offset-background transition ${accent === a.id ? "ring-2 ring-foreground" : "opacity-70 hover:opacity-100"}`}
+                    className={`size-11 rounded-full ${a.bgClass} ring-offset-4 ring-offset-background transition ${
+                      accent === a.id ? "ring-2 ring-foreground" : "opacity-70 hover:opacity-100"
+                    }`}
                   />
                 ))}
               </div>
@@ -359,7 +273,7 @@ export function Personalize() {
             </div>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-6 font-mono text-[11px] text-muted-foreground">
               {opts.map((o) => (
-                <li key={o} className="before:mr-1.5 before:text-live before:content-['▪']">
+                <li key={o} className="before:mr-1.5 before:text-primary before:content-['▪']">
                   {o}
                 </li>
               ))}
@@ -368,7 +282,7 @@ export function Personalize() {
         </div>
         <Reveal className="lg:col-span-7">
           <WindowFrame title={`focusframe — ${accent}`}>
-            <DashboardMock pet={pet} />
+            <ProductGif pet={pet} />
           </WindowFrame>
         </Reveal>
       </div>
