@@ -3,6 +3,16 @@ import { Moon, Sun, RotateCcw } from "lucide-react";
 import { PixelScene, type Pet } from "./pixel";
 import { Reveal, SectionHead, WindowFrame } from "./shared";
 import { DashboardMock } from "./mockups";
+import {
+  COLS,
+  ROWS,
+  GAP,
+  SNAKE_SPEEDS,
+  type SnakeSpeed,
+  getCalendarYearInfo,
+  getDotCenter,
+  useSnakeCalendar,
+} from "@/lib/focusframe/snakeRenderer";
 
 const PETS: Pet[] = ["cat", "dog", "dinosaur"];
 
@@ -110,9 +120,6 @@ function Toggle({
   );
 }
 
-const SPEEDS = { Slow: 260, Medium: 130, Fast: 60 } as const;
-type Speed = keyof typeof SPEEDS;
-
 function useNow() {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
@@ -123,91 +130,29 @@ function useNow() {
   return now;
 }
 
-const COLS = 26;
-const ROWS = 15;
-const GAP = 10;
-
-function neighbours(i: number) {
-  const r = Math.floor(i / COLS),
-    c = i % COLS,
-    out: number[] = [];
-  if (c > 0) out.push(i - 1);
-  if (c < COLS - 1) out.push(i + 1);
-  if (r > 0) out.push(i - COLS);
-  if (r < ROWS - 1) out.push(i + COLS);
-  return out;
-}
-
 export function YearDots() {
   const now = useNow();
-  const [speed, setSpeed] = useState<Speed>("Medium");
-  const [on, setOn] = useState(true);
-  const [body, setBody] = useState<number[]>([]);
-  const eaten = useRef<Set<number>>(new Set());
+  const cal = getCalendarYearInfo(now ?? new Date());
 
-  const year = now?.getFullYear() ?? 2026;
-  const total = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 366 : 365;
-  const doy = now
-    ? Math.floor((Date.UTC(year, now.getMonth(), now.getDate()) - Date.UTC(year, 0, 1)) / 864e5)
-    : 0;
-  const done = doy; // days fully completed
-
-  const regrow = () => {
-    eaten.current = new Set();
-    setBody(done > 1 ? [0] : []);
-  };
-  useEffect(() => {
-    if (done > 1) regrow();
-  }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (!on || done < 2) return;
-    const t = setInterval(() => {
-      setBody((prev) => {
-        const first = prev[0];
-        if (first === undefined) return [0];
-        const head: number = first;
-        const blocked = new Set(prev.slice(0, -1));
-        // BFS over past days to the nearest uneaten dot
-        const from = new Map<number, number>([[head, -1]]);
-        const q = [head];
-        let target = -1;
-        while (q.length) {
-          const cur = q.shift()!;
-          if (cur !== head && !eaten.current.has(cur)) {
-            target = cur;
-            break;
-          }
-          for (const n of neighbours(cur))
-            if (n < done && !from.has(n) && !blocked.has(n)) {
-              from.set(n, cur);
-              q.push(n);
-            }
-        }
-        if (target < 0) {
-          eaten.current = new Set();
-          return [head];
-        }
-        let step = target;
-        while (from.get(step) !== head) step = from.get(step)!;
-        const ate = !eaten.current.has(step);
-        eaten.current.add(step);
-        const next = [step, ...prev];
-        const max = Math.min(4 + Math.floor(eaten.current.size / 12), 14);
-        return ate && next.length <= max ? next : next.slice(0, Math.min(next.length - 1, max));
-      });
-    }, SPEEDS[speed]);
-    return () => clearInterval(t);
-  }, [on, speed, done]);
-
-  const midnight = now
-    ? new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime()
-    : 0;
-  const hh = String(Math.floor(midnight / 36e5)).padStart(2, "0");
-  const mm = String(Math.floor((midnight % 36e5) / 6e4)).padStart(2, "0");
-  const ss = String(Math.floor((midnight % 6e4) / 1e3)).padStart(2, "0");
-  const pt = (i: number) => `${(i % COLS) * GAP + GAP / 2},${Math.floor(i / COLS) * GAP + GAP / 2}`;
-  const path = body.length ? `M${body.map(pt).join(" L")}` : "";
+  const {
+    speed,
+    running,
+    reducedMotion,
+    eaten,
+    bodyPath,
+    tail1Path,
+    tail2Path,
+    head,
+    containerRef,
+    changeSpeed,
+    toggleAnimate,
+    regrowNow,
+  } = useSnakeCalendar({
+    walkableCount: cal.walkableCount,
+    initialSpeed: "Medium",
+    initialRunning: true,
+    regrow: true,
+  });
 
   return (
     <section className="border-t border-border py-24 lg:py-32">
@@ -217,79 +162,120 @@ export function YearDots() {
             Every dot is a day. A little snake roams the days behind you, eating them one by one.
           </SectionHead>
           <Reveal className="mt-10 grid grid-cols-2 gap-6 border-t border-border pt-6">
-            <Stat value={now ? String(total - done) : "—"} label="days left this year" />
-            <Stat value={now ? `${hh}:${mm}:${ss}` : "—"} label="until midnight" />
+            <Stat value={now ? String(cal.daysLeft) : "—"} label="days left this year" />
+            <Stat value={now ? cal.countdown : "—"} label="until midnight" />
           </Reveal>
         </div>
         <Reveal className="lg:col-span-8">
-          <div className="panel p-5 sm:p-8">
+          <div ref={containerRef} className="panel p-5 sm:p-8">
             <svg
               viewBox={`0 0 ${COLS * GAP} ${ROWS * GAP}`}
               className="w-full"
               role="img"
-              aria-label={`${done} of ${total} days of ${year} completed`}
+              aria-label={`${cal.walkableCount} of ${cal.daysInYear} days of ${cal.year} completed`}
             >
-              {Array.from({ length: total }, (_, i) => {
-                const past = i < done && !eaten.current.has(i);
-                const cls =
-                  i === done
-                    ? "fill-primary"
-                    : past
-                      ? "fill-foreground"
-                      : "fill-muted-foreground/25";
-                const [x, y] = pt(i).split(",").map(Number);
+              {Array.from({ length: cal.daysInYear }, (_, i) => {
+                const isCompleted = i < cal.walkableCount;
+                const isToday = i === cal.todayIndex;
+                const isEaten = isCompleted && !reducedMotion && eaten.has(i);
+
+                // Eaten dots fade to approximately 0.18 opacity and scale to 0.7
+                const radius = isToday ? 2.6 : isCompleted ? (isEaten ? 1.82 : 2.6) : 2.2;
+                const opacity = isEaten ? 0.18 : isCompleted || isToday ? 1 : 0.25;
+                const fillClass = isToday
+                  ? "fill-primary"
+                  : isCompleted
+                    ? "fill-foreground"
+                    : "fill-muted-foreground/25";
+
+                const pt = getDotCenter(i);
                 return (
                   <circle
                     key={i}
-                    cx={x}
-                    cy={y}
-                    r={i < done || i === done ? 2.6 : 2.2}
-                    className={`transition-colors duration-300 ${cls}`}
+                    cx={pt.x}
+                    cy={pt.y}
+                    r={radius}
+                    className={`transition-[opacity,r,fill] duration-400 ease-out ${fillClass}`}
+                    style={{ opacity }}
                   />
                 );
               })}
-              {path && (
+              {/* Snake layers in back-to-front paint order matching extension: tail2, tail1, body, head */}
+              {tail2Path && (
                 <path
-                  d={path}
+                  d={tail2Path}
                   fill="none"
-                  strokeWidth={3.6}
+                  strokeWidth={2.08}
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   className="stroke-primary"
+                />
+              )}
+              {tail1Path && (
+                <path
+                  d={tail1Path}
+                  fill="none"
+                  strokeWidth={3.12}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="stroke-primary"
+                />
+              )}
+              {bodyPath && (
+                <path
+                  d={bodyPath}
+                  fill="none"
+                  strokeWidth={4.16}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="stroke-primary"
+                />
+              )}
+              {head && (
+                <circle
+                  cx={head.x}
+                  cy={head.y}
+                  r={2.392}
+                  className="fill-primary"
+                  style={{ opacity: 0.82 }}
                 />
               )}
             </svg>
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-primary" />
-                {now ? `${total - done} days left this year` : ""}
+                {now ? `${cal.daysLeft} days left this year` : ""}
               </span>
               <span>·</span>
               <span>
-                {year} · day {done + 1}
+                {cal.year} · day {cal.dayOfYear}
               </span>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-border pt-5">
               <span className="eyebrow mr-2">Snake</span>
-              {(Object.keys(SPEEDS) as Speed[]).map((s) => (
+              {(Object.keys(SNAKE_SPEEDS) as SnakeSpeed[]).map((s) => (
                 <button
                   key={s}
-                  onClick={() => setSpeed(s)}
+                  onClick={() => changeSpeed(s)}
                   aria-pressed={speed === s}
-                  className={`min-h-9 rounded border px-3 font-mono text-xs ${speed === s ? "border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
+                  className={`min-h-9 rounded border px-3 font-mono text-xs ${
+                    speed === s
+                      ? "border-primary text-primary"
+                      : "border-border text-muted-foreground hover:text-foreground"
+                  }`}
                 >
                   {s}
                 </button>
               ))}
               <button
-                onClick={() => setOn(!on)}
-                aria-pressed={on}
+                onClick={toggleAnimate}
+                aria-pressed={running}
                 className="min-h-9 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground"
               >
-                {on ? "Pause" : "Animate"}
+                {running ? "Pause" : "Animate"}
               </button>
               <button
-                onClick={regrow}
+                onClick={regrowNow}
                 className="flex min-h-9 items-center gap-1.5 rounded border border-border px-3 font-mono text-xs text-muted-foreground hover:text-foreground"
               >
                 <RotateCcw className="size-3" />
