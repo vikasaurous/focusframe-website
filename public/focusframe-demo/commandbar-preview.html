@@ -11,161 +11,428 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --accent: #e8603c;
-      --panel: #181a1f;
-      --panel-hover: #1e2026;
-      --paper: #f4f5f8;
-      --soft: rgba(255,255,255,0.08);
-      --muted: rgba(255,255,255,0.35);
-      --line: rgba(255,255,255,0.1);
-      --focus: rgba(232,96,60,0.4);
+      color-scheme: dark;
+      --ground: #0d0e0f;
+      --panel: #1a1c1f;
+      --panel-hover: #202327;
+      --paper: #f2f1ed;
+      --soft: #a6a6a9;
+      --muted: #898b8f;
+      --line: #2d3034;
+      --accent: #ef6758;
+      --focus: #d8ebff;
     }
+    :root[data-accent="cobalt"] { --accent: #8cb8ff; }
+    :root[data-accent="moss"] { --accent: #b1d994; }
+    :root[data-accent="plum"] { --accent: #e6afe5; }
     html, body {
-      width: 100%; height: 100%;
-      background: #0d0e11;
-      font-family: "JetBrains Mono", monospace;
+      width: 100%;
+      height: 100%;
+      background: var(--ground);
+      color: var(--paper);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
       overflow: hidden;
-      color: #e1e2e5;
     }
-    /* Blurred background simulating the dashboard behind the bar */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #3b3e42 transparent;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      border-radius: 9999px;
+      background: #3b3e42;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+    /* Subtle background simulating FocusFrame's new-tab dashboard behind the bar */
     #bg {
       position: fixed;
       inset: 0;
-      background: #0d0e11;
+      background: var(--ground);
       background-image:
-        radial-gradient(ellipse 60% 40% at 20% 60%, rgba(232,96,60,0.04) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 50% at 80% 30%, rgba(255,255,255,0.02) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 40% at 20% 60%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 80% 30%, rgba(255, 255, 255, 0.025) 0%, transparent 60%);
     }
-    /* Fake dashboard content behind the bar (blurred) */
+    /* Simulated dashboard behind the command bar (blurred by .cb-scrim while open) */
     #fake-dash {
       position: fixed;
       inset: 0;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      padding: 32px 48px;
-      gap: 8px;
-      filter: blur(3px) brightness(0.5);
-      pointer-events: none;
+      padding: clamp(64px, 9vw, 76px) clamp(20px, 6vw, 48px) clamp(24px, 5vw, 36px);
+      gap: 10px;
       user-select: none;
     }
+    .fd-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+    .fd-wordmark {
+      font-family: Bahnschrift, "Segoe UI", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--paper);
+      opacity: 0.7;
+    }
+    .fd-wordmark span {
+      color: var(--accent);
+    }
+    .fd-teaser {
+      margin-top: auto;
+      margin-bottom: 16px;
+      align-self: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--soft);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 11px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    }
+    .fd-teaser:hover {
+      border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+      color: var(--paper);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+    }
+    .fd-teaser:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+    .fd-kbd {
+      padding: 2px 6px;
+      border-radius: 5px;
+      border: 1px solid #353941;
+      border-bottom-width: 2px;
+      background: #1b1d22;
+      color: var(--paper);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 10px;
+    }
     .fd-clock {
-      font-size: clamp(32px, 6vw, 72px);
+      margin-top: 12px;
+      font-size: clamp(34px, 6vw, 68px);
       font-weight: 300;
+      line-height: 1;
       letter-spacing: -0.01em;
-      color: #e1e2e5;
-      font-family: "Instrument Serif", serif;
+      color: var(--paper);
+      font-family: "Instrument Serif", Georgia, serif;
+      opacity: 0.72;
     }
     .fd-label {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
       font-size: 11px;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.06em;
+      color: var(--muted);
     }
     .fd-modules {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
-      margin-top: 20px;
+      width: 100%;
+      max-width: 580px;
+      margin-top: 16px;
     }
     .fd-module {
-      width: 180px;
-      height: 100px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px;
+      height: 88px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 8px;
     }
-    /* Info label */
+    @media (max-width: 480px) {
+      .fd-modules {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .fd-module:nth-child(3) {
+        display: none;
+      }
+    }
+    /* Subtle preview label behind open dialog */
     #cmd-label {
       position: fixed;
       top: 12px;
       left: 50%;
       transform: translateX(-50%);
-      font-family: "JetBrains Mono", monospace;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
       font-size: 10px;
       letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.34);
       white-space: nowrap;
-      z-index: 20;
+      z-index: 5;
       pointer-events: none;
     }
-    /* Keep cb-root always visible in preview mode */
-    .cb-root {
-      visibility: visible !important;
-      pointer-events: auto !important;
-      transition: none !important;
+    /* Preview-only navigation banner (never opens external tabs) */
+    .preview-notice {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: min(560px, calc(100% - 24px));
+      padding: 10px 12px 10px 14px;
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+      background: #14161a;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+      color: var(--paper);
     }
-    /* Prevent scrim from covering entire bg — keep partial opacity */
-    .cb-scrim {
-      opacity: 1 !important;
-      transition: none !important;
+    .preview-notice[hidden] {
+      display: none;
     }
-    /* Suppress navigation attempts (we're in an iframe) */
+    .preview-dot {
+      flex: none;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .preview-text {
+      flex: 1;
+      min-width: 0;
+    }
+    .preview-title {
+      font-family: Bahnschrift, "Segoe UI", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--paper);
+    }
+    .preview-url {
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+    .preview-close {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--soft);
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .preview-close:hover {
+      color: var(--paper);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .preview-close:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
   <div id="bg"></div>
-  <div id="fake-dash" aria-hidden="true">
+  <main class="frame" id="fake-dash">
+    <div class="fd-top">
+      <div class="fd-wordmark">focus<span>frame</span></div>
+    </div>
     <div class="fd-clock" id="fd-clock">9:41 AM</div>
     <div class="fd-label">Pick the one thing that matters today</div>
-    <div class="fd-modules">
+    <div class="fd-modules" aria-hidden="true">
       <div class="fd-module"></div>
       <div class="fd-module"></div>
       <div class="fd-module"></div>
     </div>
+    <button type="button" class="fd-teaser" id="reopen-btn">
+      Press <kbd class="fd-kbd" id="fd-shortcut">Alt + K</kbd> to open Command Bar
+    </button>
+  </main>
+  <div id="cmd-label" aria-hidden="true">COMMAND BAR · ALT + K</div>
+  <div id="preview-notice" class="preview-notice" role="status" aria-live="polite" hidden>
+    <span class="preview-dot" aria-hidden="true"></span>
+    <div class="preview-text">
+      <p class="preview-title" id="preview-title"></p>
+      <p class="preview-url" id="preview-url"></p>
+    </div>
+    <button type="button" class="preview-close" id="preview-close" aria-label="Dismiss preview notice">×</button>
   </div>
-  <div id="cmd-label">COMMAND BAR · ALT + K</div>
 
-  <!-- Command bar scripts -->
+  <!-- Actual FocusFrame extension command bar scripts -->
   <script src="src/commandbar/commands.js"></script>
   <script src="src/commandbar/ripple.js"></script>
   <script src="src/commandbar/commandBar.js"></script>
   <script>
-    // Update fake clock
-    (function updateClock() {
-      var now = new Date();
-      var h = now.getHours() % 12 || 12;
-      var m = String(now.getMinutes()).padStart(2, "0");
-      var p = now.getHours() >= 12 ? "PM" : "AM";
-      var el = document.getElementById("fd-clock");
-      if (el) el.textContent = h + ":" + m + " " + p;
-    })();
+    (function () {
+      "use strict";
 
-    // Initialize command bar with all defaults enabled
-    var settings = window.FFCommands
-      ? window.FFCommands.mergeSettings({ enabled: true })
-      : { enabled: true };
+      function applyAccent(val) {
+        var map = { blue: "cobalt", green: "moss", purple: "plum" };
+        var norm = map[val] || val;
+        if (norm === "cobalt" || norm === "moss" || norm === "plum") {
+          document.documentElement.dataset.accent = norm;
+        } else {
+          document.documentElement.removeAttribute("data-accent");
+        }
+      }
 
-    // Navigate safely inside iframe — open links in new tab
-    function navigate(url, opts) {
       try {
-        window.open(url, "_blank", "noopener,noreferrer");
-      } catch(e) {}
-    }
+        var params = new URLSearchParams(window.location.search);
+        var qAccent = params.get("accent");
+        if (qAccent) {
+          applyAccent(qAccent);
+        } else {
+          var storedAccent = localStorage.getItem("focusframe-accent");
+          if (storedAccent) applyAccent(storedAccent);
+        }
+      } catch (e) {}
 
-    if (window.CommandBar) {
-      CommandBar.init({
-        settings: settings,
-        onChange: function() {},
-        navigate: navigate,
+      window.addEventListener("message", function (event) {
+        if (event.data && event.data.type === "SET_ACCENT" && event.data.accent) {
+          applyAccent(event.data.accent);
+        }
       });
 
-      // Force open immediately — override the guard so it opens without keyboard
-      // We patch open() by calling it after removing the !settings.enabled guard
-      // The easiest way: temporarily call open() which checks _ready & _settings.enabled
-      // Since settings.enabled = true and init() sets _ready, open() should work:
-      setTimeout(function() {
-        try { CommandBar.open(); } catch(e) {}
-      }, 80);
+      window.addEventListener("storage", function (event) {
+        if (event.key === "focusframe-accent" && event.newValue) {
+          applyAccent(event.newValue);
+        }
+      });
 
-      // Prevent closing via Escape or scrim click in preview
-      // We override close() to re-open immediately
-      var _origClose = CommandBar.close;
-      CommandBar.close = function() {
-        // In preview mode, closing immediately re-opens
-        setTimeout(function() {
-          try { CommandBar.open(); } catch(e) {}
-        }, 50);
-      };
-    }
+      function updateClock() {
+        var now = new Date();
+        var h = now.getHours() % 12 || 12;
+        var m = String(now.getMinutes()).padStart(2, "0");
+        var p = now.getHours() >= 12 ? "PM" : "AM";
+        var el = document.getElementById("fd-clock");
+        if (el) el.textContent = h + ":" + m + " " + p;
+      }
+      updateClock();
+      setInterval(updateClock, 15000);
+
+      var settings = window.FFCommands
+        ? window.FFCommands.mergeSettings({ enabled: true })
+        : { enabled: true };
+
+      var isMac =
+        typeof navigator !== "undefined" &&
+        /Mac|iPhone|iPad/.test(navigator.platform || "");
+      var shortcutText =
+        window.FFCommands && settings.shortcut
+          ? window.FFCommands.formatShortcut(settings.shortcut, isMac)
+          : "Alt + K";
+
+      var cmdLabel = document.getElementById("cmd-label");
+      if (cmdLabel) cmdLabel.textContent = "COMMAND BAR · " + shortcutText.toUpperCase();
+      var fdShortcut = document.getElementById("fd-shortcut");
+      if (fdShortcut) fdShortcut.textContent = shortcutText;
+
+      var noticeEl = document.getElementById("preview-notice");
+      var noticeTitle = document.getElementById("preview-title");
+      var noticeUrl = document.getElementById("preview-url");
+      var noticeClose = document.getElementById("preview-close");
+      var noticeTimer = null;
+
+      function hidePreviewNotice() {
+        if (noticeTimer) {
+          clearTimeout(noticeTimer);
+          noticeTimer = null;
+        }
+        if (noticeEl) noticeEl.hidden = true;
+      }
+
+      if (noticeClose) {
+        noticeClose.addEventListener("click", hidePreviewNotice);
+      }
+
+      // Preview-only navigate callback: never opens external tabs or navigates the page.
+      function navigate(url, opts) {
+        var host = "";
+        try {
+          host = new URL(url).hostname.replace(/^www\./, "");
+        } catch (e) {}
+        var inNewTab = !!(opts && opts.newTab);
+        if (noticeTitle) {
+          noticeTitle.textContent =
+            "Preview · Would open " +
+            (host || "destination") +
+            (inNewTab ? " in a new tab" : " in current tab");
+        }
+        if (noticeUrl) {
+          noticeUrl.textContent = url;
+          noticeUrl.title = url;
+        }
+        if (noticeEl) noticeEl.hidden = false;
+        if (noticeTimer) clearTimeout(noticeTimer);
+        noticeTimer = setTimeout(hidePreviewNotice, 6500);
+      }
+
+      if (window.CommandBar) {
+        CommandBar.init({
+          settings: settings,
+          onChange: function () {},
+          navigate: navigate,
+        });
+
+        var boxEl = document.querySelector(".cb-box");
+        if (boxEl) {
+          boxEl.addEventListener("click", function (e) {
+            if (e.target && e.target.closest("button, a, input, textarea")) return;
+            var inp = document.querySelector(".cb-input");
+            if (inp) inp.focus({ preventScroll: true });
+          });
+        }
+
+        var reopenBtn = document.getElementById("reopen-btn");
+        if (reopenBtn) {
+          reopenBtn.addEventListener("click", function () {
+            CommandBar.open();
+          });
+        }
+
+        // Open automatically on boot and enter "/" so destination options render immediately.
+        setTimeout(function () {
+          try {
+            CommandBar.open();
+            var inputEl = document.querySelector(".cb-input");
+            if (inputEl) {
+              inputEl.value = "/";
+              inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+              inputEl.focus({ preventScroll: true });
+              if (typeof inputEl.setSelectionRange === "function") {
+                inputEl.setSelectionRange(1, 1);
+              }
+            }
+          } catch (e) {}
+        }, 80);
+      }
+    })();
   </script>
 </body>
 </html>
