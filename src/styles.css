@@ -454,3 +454,14 @@
     width: 77px;
   }
 }
+
+.support-fab {
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1rem + env(safe-area-inset-right, 0px));
+}
+@media (min-width: 640px) {
+  .support-fab {
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    right: calc(1.5rem + env(safe-area-inset-right, 0px));
+  }
+}

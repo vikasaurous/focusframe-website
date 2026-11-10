@@ -21,6 +21,7 @@ export default function CatLayer() {
     <Oneko
       meow={false}
       skin="classic"
+      zIndex={30}
       napWhileTyping
       perchOnHover
       seasonal

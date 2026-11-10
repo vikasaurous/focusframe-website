@@ -211,9 +211,8 @@ function RestingCat({
       aria-hidden="true"
       style={{
         position: "fixed",
-        left: position ? position.x - TILE / 2 : undefined,
+        left: position ? position.x - TILE / 2 : inset - TILE / 2,
         top: position ? position.y - TILE / 2 : undefined,
-        right: position ? undefined : inset - TILE / 2,
         bottom: position ? undefined : inset - TILE / 2,
         width: TILE,
         height: TILE,

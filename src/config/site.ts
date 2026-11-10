@@ -5,6 +5,7 @@ export const EDGE_ADDONS_URL = "";
 
 export const GITHUB_URL = "https://github.com/vikasaurous/FocusFrame";
 export const GITHUB_ISSUES_URL = `${GITHUB_URL}/issues`;
+export const BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/vikasaurous";
 export const WEBSITE_URL = ""; // canonical URL placeholder — set once a domain is chosen
 
 export const PRODUCT = {
