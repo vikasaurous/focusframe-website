@@ -80,6 +80,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "google-site-verification",
+        content: "5lf15DYlQJrT0xZA7U5jwi0bCGEI0BB8Vf1Z_jqIHuo",
+      },
       { title: "FocusFrame — Make Every New Tab Count" },
       { name: "description", content: "A pixel-art productivity new tab for your browser." },
       { name: "theme-color", content: "#0d0e0f" },
