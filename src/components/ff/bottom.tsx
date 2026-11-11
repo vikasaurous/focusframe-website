@@ -57,7 +57,7 @@ export function HowItWorks() {
   const steps = [
     [
       "01",
-      "Download the beta and load it unpacked in Chrome.",
+      "Download the FocusFrame repository ZIP from GitHub using Code → Download ZIP, extract it, and load the folder containing manifest.json in Chrome.",
       <svg
         key="a"
         viewBox="0 0 9 7"
@@ -111,7 +111,7 @@ export function HowItWorks() {
   );
 }
 
-type BrowserStatus = "beta" | "experimental" | "untested";
+type BrowserStatus = "testing" | "experimental" | "untested";
 
 const BROWSER_AVAILABILITY: readonly {
   name: string;
@@ -122,10 +122,10 @@ const BROWSER_AVAILABILITY: readonly {
 }[] = [
   {
     name: "Google Chrome",
-    status: "beta",
-    badge: "Beta available",
-    note: "Manual unpacked installation via chrome://extensions.",
-    actionLabel: BETA_ZIP_URL ? "Download beta ZIP" : "Manual install steps",
+    status: "testing",
+    badge: "Manual testing setup",
+    note: "Unpacked setup via chrome://extensions using the GitHub repository ZIP. Clean install not verified yet.",
+    actionLabel: BETA_ZIP_URL ? "Download release ZIP" : "Manual install steps",
   },
   {
     name: "Firefox",
@@ -144,12 +144,12 @@ const BROWSER_AVAILABILITY: readonly {
 ];
 
 const MANUAL_INSTALL_STEPS = [
-  "Download the beta ZIP.",
-  "Extract it.",
+  "Download the FocusFrame repository ZIP from GitHub using Code → Download ZIP.",
+  "Extract the downloaded ZIP archive.",
   "Open `chrome://extensions`.",
   "Enable Developer mode.",
   "Click Load unpacked.",
-  "Select the extracted directory containing `manifest.json`.",
+  "Select the extracted folder containing `manifest.json`.",
   "Open a new tab.",
 ] as const;
 
@@ -159,22 +159,23 @@ export function Browsers() {
     <section id="download" className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <SectionHead index="10" label="Availability" title="Ready for your next new tab?">
-          Chrome is open for manual beta testing. Store listings are not published yet.
+          Chrome has manual unpacked setup instructions for testing. Clean installation and store
+          listings are not verified or published yet.
         </SectionHead>
         <div className="mt-14 grid gap-4 md:grid-cols-3">
           {BROWSER_AVAILABILITY.map((b) => {
-            const isBeta = b.status === "beta";
+            const isTesting = b.status === "testing";
             const isExperimental = b.status === "experimental";
-            const badgeTone = isBeta
-              ? "text-moss"
+            const badgeTone = isTesting
+              ? "text-primary"
               : isExperimental
                 ? "text-primary"
                 : "text-subtle";
-            const dotTone = isBeta ? "bg-moss" : isExperimental ? "bg-primary" : "bg-subtle";
+            const dotTone = isTesting ? "bg-primary" : isExperimental ? "bg-primary" : "bg-subtle";
             return (
               <Reveal
                 key={b.name}
-                className={`panel flex flex-col justify-between gap-6 p-6 ${isBeta ? "border-primary/50" : ""}`}
+                className={`panel flex flex-col justify-between gap-6 p-6 ${isTesting ? "border-primary/50" : ""}`}
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
@@ -188,7 +189,7 @@ export function Browsers() {
                   </div>
                   <p className="text-sm text-muted-foreground">{b.note}</p>
                 </div>
-                {isBeta ? (
+                {isTesting ? (
                   hasReleaseZip ? (
                     <InstallBetaButton
                       label={b.actionLabel}
@@ -215,23 +216,25 @@ export function Browsers() {
           <div id="manual-install" className="scroll-mt-24">
             <div className="flex flex-col justify-between gap-4 border-b border-border pb-5 sm:flex-row sm:items-end">
               <div>
-                <p className="eyebrow">Manual installation · Chrome beta</p>
+                <p className="eyebrow">Manual installation · Chrome testing setup</p>
                 <h3 className="mt-2 font-serif text-2xl text-foreground sm:text-3xl">
-                  Load the unpacked beta in seven steps.
+                  Load the unpacked extension in seven steps.
                 </h3>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {hasReleaseZip
-                    ? "Download the beta ZIP archive below and load it in Developer mode."
-                    : "No versioned release ZIP is published yet. Download the repository ZIP from GitHub (Code → Download ZIP) to install unpacked."}
+                    ? "Download the release ZIP archive below and load it in Developer mode."
+                    : renderFaqAnswer(
+                        "No versioned release ZIP exists yet. Download the FocusFrame repository ZIP from GitHub using Code → Download ZIP, extract it, and select the folder containing `manifest.json`.",
+                      )}
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
                 {hasReleaseZip ? (
-                  <InstallBetaButton label="Download beta ZIP" href={BETA_ZIP_URL} external />
+                  <InstallBetaButton label="Download release ZIP" href={BETA_ZIP_URL} external />
                 ) : (
                   <>
                     <button className="btn-ghost" disabled aria-disabled="true">
-                      Versioned beta ZIP not published yet
+                      No versioned release ZIP published
                     </button>
                     <a
                       href={GITHUB_URL}
@@ -313,8 +316,8 @@ const FAQS: [string, string][] = [
     "Unfinished tasks carry over to the next day. Completed tasks are cleared when the day changes.",
   ],
   [
-    "Which browsers are supported during beta?",
-    "Google Chrome is available for beta testing via manual unpacked installation (`chrome://extensions`). Firefox is in experimental compatibility testing and is not advertised as fully supported yet. Microsoft Edge has not been independently tested yet. Browser store listings are not published yet.",
+    "Which browsers are currently supported?",
+    "Google Chrome can be loaded manually for testing as an unpacked extension (`chrome://extensions`) by downloading the FocusFrame repository ZIP from GitHub using Code → Download ZIP, extracting it, and selecting the folder containing `manifest.json` — clean Chrome installation has not been independently verified yet. Firefox is in experimental compatibility testing and is not advertised as fully supported yet. Microsoft Edge has not been tested yet. Browser store listings and versioned release ZIPs are not published yet.",
   ],
 ];
 
@@ -396,14 +399,14 @@ export function FinalCta() {
           account.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
-          <InstallBetaButton label="Install beta" href="#download" />
+          <InstallBetaButton label="Manual install" href="#download" />
           <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
             <Github className="size-4" aria-hidden />
             View on GitHub
           </a>
         </div>
         <p className="font-mono text-[11px] text-subtle">
-          Chrome beta via unpacked install · Firefox experimental · Edge not tested yet
+          Chrome manual testing setup · Firefox experimental · Edge not tested yet
         </p>
         <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-mono text-[11px] text-subtle">
           {trust.map((t) => (
@@ -469,7 +472,7 @@ export function Footer() {
             </li>
             <li>
               <a href="#download" className="text-muted-foreground hover:text-foreground">
-                Browser availability & beta install
+                Browser availability & manual install
               </a>
             </li>
           </ul>

@@ -41,7 +41,7 @@ export function SectionHead({ index, label, title, children, className = "" }: {
 }
 
 export function InstallBetaButton({
-  label = "Install beta",
+  label = "Manual install",
   href = "#download",
   external = false,
   className = "",

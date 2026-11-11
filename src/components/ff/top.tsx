@@ -115,13 +115,13 @@ export function Hero() {
             world that feels like yours.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <InstallBetaButton label="Install beta" href="#download" />
+            <InstallBetaButton label="Manual install" href="#download" />
             <a href="#features" className="btn-ghost">
               Explore features
             </a>
           </div>
           <p className="mt-6 font-mono text-[11px] text-subtle">
-            Chrome beta (manual install) · Firefox experimental · Edge not tested yet
+            Chrome manual testing setup · Firefox experimental · Edge not tested yet
           </p>
         </div>
         <div className="anim-rise relative lg:col-span-7 [animation-delay:150ms]">
