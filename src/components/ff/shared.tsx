@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, Coffee } from "lucide-react";
-import { BUY_ME_A_COFFEE_URL, firefoxHref, FIREFOX_ADDON_URL } from "@/config/site";
+import { BUY_ME_A_COFFEE_URL } from "@/config/site";
 import {
   Dialog,
   DialogContent,
@@ -40,10 +40,23 @@ export function SectionHead({ index, label, title, children, className = "" }: {
   );
 }
 
-export function FirefoxButton({ label = "Add to Firefox", className = "" }: { label?: string; className?: string }) {
-  const external = Boolean(FIREFOX_ADDON_URL);
+export function InstallBetaButton({
+  label = "Install beta",
+  href = "#download",
+  external = false,
+  className = "",
+}: {
+  label?: string;
+  href?: string;
+  external?: boolean;
+  className?: string;
+}) {
   return (
-    <a href={firefoxHref()} className={`btn-primary ${className}`} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+    <a
+      href={href}
+      className={`btn-primary ${className}`}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+    >
       {label}
       <ArrowUpRight className="size-4" aria-hidden />
     </a>

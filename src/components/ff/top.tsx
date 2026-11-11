@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Github, Menu, X } from "lucide-react";
 import { GITHUB_URL, NAV_LINKS } from "@/config/site";
-import { BrandMark, FirefoxButton, Reveal, SectionHead, WindowFrame } from "./shared";
+import { BrandMark, InstallBetaButton, Reveal, SectionHead, WindowFrame } from "./shared";
 import { ProductGif } from "./mockups";
 import { useAccent } from "@/lib/theme";
 // import { PixelScene } from "./pixel";
@@ -115,13 +115,13 @@ export function Hero() {
             world that feels like yours.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <FirefoxButton />
+            <InstallBetaButton label="Install beta" href="#download" />
             <a href="#features" className="btn-ghost">
               Explore features
             </a>
           </div>
           <p className="mt-6 font-mono text-[11px] text-subtle">
-            Available on Firefox · Chrome and Edge coming soon
+            Chrome beta (manual install) · Firefox experimental · Edge not tested yet
           </p>
         </div>
         <div className="anim-rise relative lg:col-span-7 [animation-delay:150ms]">
