@@ -35,6 +35,10 @@ const PALETTE: Record<string, string> = {
   p: "#e3e5ea",
   n: "#aeb3bd",
   c: "#f6f7f9",
+  b: "#eceef1",
+  B: "#a7adb9",
+  N: "#3b3e46",
+  C: "#c2c6cf",
 };
 const GROUND = { top: "#3b3f47", body: "#1b1d22", dot: "#262a31" };
 
@@ -153,6 +157,45 @@ const CAT_SIT_B = [
   "..ooooOOOOcc......",
 ];
 
+const DOG_SIT_A = [
+  "........bbbbbbb.....",
+  "........BBbbbbb.....",
+  "........BBbebbb.....",
+  "........BBbbbcccN...",
+  "........BBbbbcccc...",
+  "....bbbbBBbbbcccc...",
+  "....bbbbCCCCbbb.....",
+  "....bBBBbbb.........",
+  "....bBBBbbcc........",
+  "....bBBBbbcc........",
+  "....bbbbbbcc........",
+  "....bbbbbbcc........",
+  "Bbbbbbbbbbcc........",
+  "bbbbbbbbbbcc........",
+] as const;
+
+const DOG_SIT_B = [
+  "........bbbbbbb.....",
+  "........BBbbbbb.....",
+  "........BBbebbb.....",
+  "........BBbbbcccN...",
+  "Bb......BBbbbcccc...",
+  "bb..bbbbBBbbbcccc...",
+  "bbb.bbbbCCCCbbb.....",
+  "bbb.bBBBbbb.........",
+  "....bBBBbbcc........",
+  "....bBBBbbcc........",
+  "....bbbbbbcc........",
+  "....bbbbbbcc........",
+  "...bbbbbbbcc........",
+  "...bbbbbbbcc........",
+] as const;
+
+// Cols 0-2 hold the tail across both frames; cols 3-19 remain stationary.
+const DOG_BODY = DOG_SIT_A.map((row) => `...${row.slice(3)}`);
+const DOG_TAIL_A = DOG_SIT_A.map((row) => row.slice(0, 3));
+const DOG_TAIL_B = DOG_SIT_B.map((row) => row.slice(0, 3));
+
 const W = 46;
 const GROUND_Y = 39;
 const H = GROUND_Y + 6;
@@ -161,10 +204,24 @@ const BY = 11;
 const CAT_X = 26;
 const CAT_W = 18;
 const CAT_H = 13;
+const DOG_W = 20;
+const DOG_H = 14;
+const DOG_IDLE_WAG_MS = 700;
+const DOG_HOVER_WAG_MS = 300;
 
-function Layer({ rows, x, y }: { rows: readonly string[]; x: number; y: number }) {
+function Layer({
+  rows,
+  x,
+  y,
+  part,
+}: {
+  rows: readonly string[];
+  x: number;
+  y: number;
+  part?: string;
+}) {
   return (
-    <g transform={`translate(${x} ${y})`}>
+    <g transform={`translate(${x} ${y})`} data-part={part}>
       {rows.flatMap((row, ry) =>
         [...row].map((ch, rx) =>
           ch === "." ? null : (
@@ -179,6 +236,7 @@ function Layer({ rows, x, y }: { rows: readonly string[]; x: number; y: number }
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const on = () => setReduced(mq.matches);
     on();
@@ -186,6 +244,59 @@ function useReducedMotion() {
     return () => mq.removeEventListener("change", on);
   }, []);
   return reduced;
+}
+
+/**
+ * Sitting extension dog (`dogSit` / `dogSitB` + `PALETTE` from src/scene/sceneSprites.js)
+ * with tail-wag timing matching src/scene/sceneEngine.js (700 ms idle, 300 ms hovered).
+ */
+export function PixelDog({
+  className = "h-10 w-auto",
+  facing = "left",
+  decorative = false,
+  label = "Pixel-art FocusFrame dog wagging its tail",
+}: {
+  className?: string;
+  facing?: "left" | "right";
+  decorative?: boolean;
+  label?: string;
+}) {
+  const reduced = useReducedMotion();
+  const [hover, setHover] = useState(false);
+  const [tail, setTail] = useState(false);
+
+  useEffect(() => {
+    if (reduced) {
+      setTail(false);
+      return;
+    }
+    const id = window.setInterval(
+      () => setTail((t) => !t),
+      hover ? DOG_HOVER_WAG_MS : DOG_IDLE_WAG_MS,
+    );
+    return () => window.clearInterval(id);
+  }, [hover, reduced]);
+
+  const groupTransform = facing === "left" ? `translate(${DOG_W} 0) scale(-1 1)` : undefined;
+
+  return (
+    <svg
+      viewBox={`0 0 ${DOG_W} ${DOG_H}`}
+      shapeRendering="crispEdges"
+      className={`block shrink-0 ${className}`}
+      data-pet="dog"
+      {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": label })}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}
+      onPointerCancel={() => setHover(false)}
+    >
+      <g transform={groupTransform}>
+        <rect width={DOG_W} height={DOG_H} fill="transparent" />
+        <Layer rows={DOG_BODY} x={0} y={0} part="body" />
+        <Layer rows={tail ? DOG_TAIL_B : DOG_TAIL_A} x={0} y={0} part="tail" />
+      </g>
+    </svg>
+  );
 }
 
 /** Give a fixed width in className (whole-number pixel scale: 46 cols x 3 or x 4). */

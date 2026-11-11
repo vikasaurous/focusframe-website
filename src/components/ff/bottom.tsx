@@ -1,17 +1,9 @@
 import { useState } from "react";
-import { Plus, Github } from "lucide-react";
-import {
-  CHROME_STORE_URL,
-  EDGE_ADDONS_URL,
-  FIREFOX_ADDON_URL,
-  GITHUB_ISSUES_URL,
-  GITHUB_URL,
-  NAV_LINKS,
-  firefoxHref,
-} from "@/config/site";
-import { BrandMark, FirefoxButton, Reveal, SectionHead } from "./shared";
-import { PETS, Sprite } from "./pixel";
-import { CtaMascots } from "./ctaMascots";
+import { ArrowUpRight, Plus, Github } from "lucide-react";
+import { BETA_ZIP_URL, GITHUB_ISSUES_URL, GITHUB_URL, NAV_LINKS } from "@/config/site";
+import { BrandMark, InstallBetaButton, Reveal, SectionHead } from "./shared";
+import { Sprite } from "./pixel";
+import { CtaMascots, PixelDog } from "./ctaMascots";
 
 export function Privacy() {
   const yes = [
@@ -40,7 +32,7 @@ export function Privacy() {
           <Reveal className="panel divide-y divide-border">
             {yes.map((y) => (
               <p key={y} className="flex items-center gap-3 px-5 py-4 text-foreground">
-                <span className="size-2 shrink-0 bg-moss" />
+                <span className="size-2 shrink-0 bg-primary" />
                 {y}
               </p>
             ))}
@@ -65,18 +57,34 @@ export function HowItWorks() {
   const steps = [
     [
       "01",
-      "Install FocusFrame from Firefox Add-ons.",
-      <Sprite key="a" rows={["..rr..", ".rrrr.", "rrrrrr", "..rr..", "..rr..", "wwwwww"]} />,
+      "Download the FocusFrame repository ZIP from GitHub using Code → Download ZIP, extract it, and load the folder containing manifest.json in Chrome.",
+      <svg
+        key="a"
+        viewBox="0 0 9 7"
+        shapeRendering="crispEdges"
+        className="h-10 w-auto"
+        aria-hidden
+      >
+        <Sprite rows={["..rr..", ".rrrr.", "rrrrrr", "..rr..", "..rr..", "wwwwww"]} />
+      </svg>,
     ],
     [
       "02",
       "Open a new browser tab.",
-      <Sprite key="b" rows={["wwwwww", "w....w", "w.rr.w", "w....w", "wwwwww"]} />,
+      <svg
+        key="b"
+        viewBox="0 0 9 7"
+        shapeRendering="crispEdges"
+        className="h-10 w-auto"
+        aria-hidden
+      >
+        <Sprite rows={["wwwwww", "w....w", "w.rr.w", "w....w", "wwwwww"]} />
+      </svg>,
     ],
     [
       "03",
       "Set your intention, organize your day and make the space yours.",
-      <Sprite key="c" rows={[...PETS.cat]} />,
+      <PixelDog key="c" decorative className="h-10 w-auto" />,
     ],
   ] as const;
   return (
@@ -92,14 +100,7 @@ export function HowItWorks() {
             <Reveal as="li" key={n} className="panel flex flex-col gap-10 p-6">
               <div className="flex items-start justify-between">
                 <span className="font-pixel text-4xl text-primary">{n}</span>
-                <svg
-                  viewBox="0 0 9 7"
-                  shapeRendering="crispEdges"
-                  className="h-10 w-auto"
-                  aria-hidden
-                >
-                  {art}
-                </svg>
+                {art}
               </div>
               <p className="font-serif text-2xl text-foreground">{t}</p>
             </Reveal>
@@ -110,47 +111,159 @@ export function HowItWorks() {
   );
 }
 
+type BrowserStatus = "testing" | "experimental" | "untested";
+
+const BROWSER_AVAILABILITY: readonly {
+  name: string;
+  status: BrowserStatus;
+  badge: string;
+  note: string;
+  actionLabel: string;
+}[] = [
+  {
+    name: "Google Chrome",
+    status: "testing",
+    badge: "Manual testing setup",
+    note: "Unpacked setup via chrome://extensions using the GitHub repository ZIP. Clean install not verified yet.",
+    actionLabel: BETA_ZIP_URL ? "Download release ZIP" : "Manual install steps",
+  },
+  {
+    name: "Firefox",
+    status: "experimental",
+    badge: "Experimental",
+    note: "Compatibility testing in progress. Not verified as fully supported yet.",
+    actionLabel: "Compatibility testing",
+  },
+  {
+    name: "Microsoft Edge",
+    status: "untested",
+    badge: "Not tested yet",
+    note: "Not independently tested in Microsoft Edge yet.",
+    actionLabel: "Not tested yet",
+  },
+];
+
+const MANUAL_INSTALL_STEPS = [
+  "Download the FocusFrame repository ZIP from GitHub using Code → Download ZIP.",
+  "Extract the downloaded ZIP archive.",
+  "Open `chrome://extensions`.",
+  "Enable Developer mode.",
+  "Click Load unpacked.",
+  "Select the extracted folder containing `manifest.json`.",
+  "Open a new tab.",
+] as const;
+
 export function Browsers() {
-  const items = [
-    { name: "Firefox", url: FIREFOX_ADDON_URL, available: true },
-    { name: "Google Chrome", url: CHROME_STORE_URL, available: false },
-    { name: "Microsoft Edge", url: EDGE_ADDONS_URL, available: false },
-  ];
+  const hasReleaseZip = Boolean(BETA_ZIP_URL);
   return (
     <section id="download" className="border-t border-border py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <SectionHead index="10" label="Availability" title="Ready for your next new tab?" />
+        <SectionHead index="10" label="Availability" title="Ready for your next new tab?">
+          Chrome has manual unpacked setup instructions for testing. Clean installation and store
+          listings are not verified or published yet.
+        </SectionHead>
         <div className="mt-14 grid gap-4 md:grid-cols-3">
-          {items.map((b) => (
-            <Reveal
-              key={b.name}
-              className={`panel flex flex-col gap-8 p-6 ${b.available ? "border-primary/50" : ""}`}
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="font-serif text-3xl text-foreground">{b.name}</h3>
-                <span
-                  className={`flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider ${b.available ? "text-moss" : "text-subtle"}`}
-                >
-                  <span className={`size-1.5 ${b.available ? "bg-moss" : "bg-subtle"}`} />
-                  {b.available ? "Available now" : "Coming soon"}
-                </span>
-              </div>
-              {b.available ? (
-                b.url ? (
-                  <FirefoxButton className="w-full" />
+          {BROWSER_AVAILABILITY.map((b) => {
+            const isTesting = b.status === "testing";
+            const isExperimental = b.status === "experimental";
+            const badgeTone = isTesting
+              ? "text-primary"
+              : isExperimental
+                ? "text-primary"
+                : "text-subtle";
+            const dotTone = isTesting ? "bg-primary" : isExperimental ? "bg-primary" : "bg-subtle";
+            return (
+              <Reveal
+                key={b.name}
+                className={`panel flex flex-col justify-between gap-6 p-6 ${isTesting ? "border-primary/50" : ""}`}
+              >
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-serif text-3xl text-foreground">{b.name}</h3>
+                    <span
+                      className={`mt-1.5 flex shrink-0 items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider ${badgeTone}`}
+                    >
+                      <span className={`size-1.5 ${dotTone}`} aria-hidden />
+                      {b.badge}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{b.note}</p>
+                </div>
+                {isTesting ? (
+                  hasReleaseZip ? (
+                    <InstallBetaButton
+                      label={b.actionLabel}
+                      href={BETA_ZIP_URL}
+                      external
+                      className="w-full"
+                    />
+                  ) : (
+                    <a href="#manual-install" className="btn-primary w-full">
+                      {b.actionLabel}
+                    </a>
+                  )
                 ) : (
-                  <span className="btn-ghost w-full" aria-disabled="true">
-                    Listing link coming shortly
-                  </span>
-                )
-              ) : (
-                <button className="btn-ghost w-full" disabled aria-disabled="true">
-                  Coming soon
-                </button>
-              )}
-            </Reveal>
-          ))}
+                  <button className="btn-ghost w-full" disabled aria-disabled="true">
+                    {b.actionLabel}
+                  </button>
+                )}
+              </Reveal>
+            );
+          })}
         </div>
+
+        <Reveal className="panel mt-6 p-6 sm:p-8">
+          <div id="manual-install" className="scroll-mt-24">
+            <div className="flex flex-col justify-between gap-4 border-b border-border pb-5 sm:flex-row sm:items-end">
+              <div>
+                <p className="eyebrow">Manual installation · Chrome testing setup</p>
+                <h3 className="mt-2 font-serif text-2xl text-foreground sm:text-3xl">
+                  Load the unpacked extension in seven steps.
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {hasReleaseZip
+                    ? "Download the release ZIP archive below and load it in Developer mode."
+                    : renderFaqAnswer(
+                        "No versioned release ZIP exists yet. Download the FocusFrame repository ZIP from GitHub using Code → Download ZIP, extract it, and select the folder containing `manifest.json`.",
+                      )}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {hasReleaseZip ? (
+                  <InstallBetaButton label="Download release ZIP" href={BETA_ZIP_URL} external />
+                ) : (
+                  <>
+                    <button className="btn-ghost" disabled aria-disabled="true">
+                      No versioned release ZIP published
+                    </button>
+                    <a
+                      href={GITHUB_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary"
+                    >
+                      Get ZIP on GitHub
+                      <ArrowUpRight className="size-4" aria-hidden />
+                    </a>
+                  </>
+                )}
+              </div>
+            </div>
+            <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {MANUAL_INSTALL_STEPS.map((step, index) => (
+                <li
+                  key={step}
+                  className="rounded border border-border bg-background/60 p-4 text-sm text-muted-foreground"
+                >
+                  <span className="font-mono text-xs text-primary">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <p className="mt-2 text-foreground">{renderFaqAnswer(step)}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -201,6 +314,10 @@ const FAQS: [string, string][] = [
   [
     "What happens to unfinished tasks?",
     "Unfinished tasks carry over to the next day. Completed tasks are cleared when the day changes.",
+  ],
+  [
+    "Which browsers are currently supported?",
+    "Google Chrome can be loaded manually for testing as an unpacked extension (`chrome://extensions`) by downloading the FocusFrame repository ZIP from GitHub using Code → Download ZIP, extracting it, and selecting the folder containing `manifest.json` — clean Chrome installation has not been independently verified yet. Firefox is in experimental compatibility testing and is not advertised as fully supported yet. Microsoft Edge has not been tested yet. Browser store listings and versioned release ZIPs are not published yet.",
   ],
 ];
 
@@ -256,8 +373,6 @@ export function Faq() {
 }
 
 export function FinalCta() {
-  // Shared FirefoxButton keeps its look; label stays honest until a listing URL exists.
-  const listed = Boolean(FIREFOX_ADDON_URL);
   const trust = ["No account", "No analytics", "Local browser storage"];
   return (
     <section className="cta-screen relative border-t border-border">
@@ -284,17 +399,15 @@ export function FinalCta() {
           account.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
-          <FirefoxButton label={listed ? "Add to Firefox" : "See Firefox availability"} />
+          <InstallBetaButton label="Manual install" href="#download" />
           <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost">
             <Github className="size-4" aria-hidden />
             View on GitHub
           </a>
         </div>
-        {!listed && (
-          <p className="font-mono text-[11px] text-subtle">
-            Listings for all major browsers coming soon.
-          </p>
-        )}
+        <p className="font-mono text-[11px] text-subtle">
+          Chrome manual testing setup · Firefox experimental · Edge not tested yet
+        </p>
         <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-mono text-[11px] text-subtle">
           {trust.map((t) => (
             <li key={t} className="flex items-center gap-2">
@@ -358,8 +471,8 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a href={firefoxHref()} className="text-muted-foreground hover:text-foreground">
-                Install on Firefox
+              <a href="#download" className="text-muted-foreground hover:text-foreground">
+                Browser availability & manual install
               </a>
             </li>
           </ul>

@@ -1,7 +1,9 @@
-// Central product + link configuration. Store URLs stay empty until real listings exist.
-export const FIREFOX_ADDON_URL = "https://addons.mozilla.org/en-US/firefox/addon/focusframe/";
+// Central product + link configuration. Store and release URLs stay empty until real listings/assets exist.
+// An older AMO listing (v0.1.1) exists on addons.mozilla.org, but remains unlinked while Firefox beta parity is verified.
+export const FIREFOX_ADDON_URL = "";
 export const CHROME_STORE_URL = "";
 export const EDGE_ADDONS_URL = "";
+export const BETA_ZIP_URL = ""; // versioned beta ZIP release asset URL — keep empty until published
 
 export const GITHUB_URL = "https://github.com/vikasaurous/FocusFrame";
 export const GITHUB_ISSUES_URL = `${GITHUB_URL}/issues`;
@@ -23,5 +25,5 @@ export const NAV_LINKS = [
   { label: "FAQ", href: "#faq" },
 ] as const;
 
-/** Firefox CTA target: real listing when configured, otherwise the download section. */
-export const firefoxHref = () => FIREFOX_ADDON_URL || "#download";
+/** Beta install target: published release ZIP when configured, otherwise the Availability section. */
+export const betaHref = () => BETA_ZIP_URL || "#download";
